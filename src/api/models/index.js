@@ -1,5 +1,6 @@
 const { Sequelize, Op } = require('sequelize');
 const ModelBase = require('./ModelBase');
+
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -13,6 +14,12 @@ const sequelize = new Sequelize(
 );
 
 const db = {};
+
+db.Action = require('./entities/Action')(sequelize);
+db.DevTokenAdmin = require('./entities/DevTokenAdmin')(sequelize);
+db.Scope = require('./entities/Scope')(sequelize);
+db.Developer = require('./entities/Developer')(sequelize);
+db.DeveloperToken = require('./entities/DeveloperToken')(sequelize);
 
 for (const key in db) {
   if (Object.hasOwnProperty.call(db, key)) {
@@ -32,9 +39,18 @@ db.startDB = async () => {
 };
 
 db.sync = async () => {
-  await db.sequelize.sync({
-    force: true,
-  });
+  // const task = [];
+
+  // for (const key in db) {
+  //   if (Object.hasOwnProperty.call(db, key)) {
+  //     if (!(db[key].prototype instanceof ModelBase)) continue;
+  //     if (!db[key].doSync) continue;
+
+  //     task.push(db[key].sync({ force: true }));
+  //   }
+  // }
+  // await Promise.all(task);
+  await db.sequelize.sync({ force: true });
 };
 
 module.exports = db;
