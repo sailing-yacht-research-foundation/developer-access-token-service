@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage --runInBand --setupFilesAfterEnv ./test-setup.js --detectOpenHandles",
-    "dev": "nodemon src/index -L",
+    "dev": "nodemon src/index",
     "lint": "eslint --max-warnings 0 .",
     "format": "prettier-eslint --eslint-config-path ./.eslintrc.js --write '**/*.js'",
     "mqecho": "node test/client/mqEcho",
