@@ -5,20 +5,20 @@ services:
     image: dev-token-api
     restart: always
     build:
-    context: ./src/api
-    dockerfile: ./Dockerfile.dev
+      context: ./src/api
+      dockerfile: ./Dockerfile.dev
     volumes:
       - ./src/api:/app
     environment:
-    NODE_ENV: development
-    DB_HOST: ${DB_HOST}
-    DB_PORT: ${DB_PORT}
-    DB_USER: ${DB_USER}
-    DB_PASSWORD: ${DB_PASSWORD}
-    DB_NAME: ${DB_NAME}
-    PORT: ${PORT}
-    JWT_SECRET: ${JWT_SECRET}
-    TOKEN_EXPIRE: ${TOKEN_EXPIRE}
+      - NODE_ENV=${NODE_ENV}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - PORT=${PORT}
+      - JWT_SECRET=${JWT_SECRET}
+      - TOKEN_EXPIRE=${TOKEN_EXPIRE}
     ports:
       - ${SERVER_PORT_MAP}:${PORT}
     depends_on:
@@ -26,19 +26,21 @@ services:
   dev-token-client:
     image: dev-token-client
     build:
-    dockerfile: Dockerfile.dev
-    context: ./src/client
+      dockerfile: Dockerfile.dev
+      context: ./src/client
     volumes:
       - /app/node_modules
       - ./src/client:/app
     environment:
       - NODE_ENV=${NODE_ENV}
-      - REACT_APP_BASE_URL=${BASE_URL}
+      - REACT_APP_BASE_URL=${API_BASE_URL}
       - REACT_APP_STORAGE_AUTH_KEY=${STORAGE_AUTH_KEY}
     logging:
       driver: none
     depends_on:
       - dev-token-api
+    ports:
+      - ${CLIENT_PORT_MAP}:3000
   db:
     image: postgres
     volumes:
