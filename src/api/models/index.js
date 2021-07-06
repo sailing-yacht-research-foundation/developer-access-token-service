@@ -39,17 +39,6 @@ db.startDB = async () => {
 };
 
 db.sync = async () => {
-  // const task = [];
-
-  // for (const key in db) {
-  //   if (Object.hasOwnProperty.call(db, key)) {
-  //     if (!(db[key].prototype instanceof ModelBase)) continue;
-  //     if (!db[key].doSync) continue;
-
-  //     task.push(db[key].sync({ force: true }));
-  //   }
-  // }
-  // await Promise.all(task);
   await db.sequelize.sync({ force: true });
 };
 
