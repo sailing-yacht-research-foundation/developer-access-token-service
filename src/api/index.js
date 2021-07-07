@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const { startDB } = require('./models');
 const httpServer = require('./servers/http');
+const generateAdminAccessToken = require('./scripts/generateAdminAccessToken');
 
 const PORT = parseInt(process.env.PORT) || 5000;
 
