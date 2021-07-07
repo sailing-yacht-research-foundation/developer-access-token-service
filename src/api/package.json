@@ -4,12 +4,12 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage --runInBand --setupFilesAfterEnv ./test-setup.js --detectOpenHandles",
-    "dev": "nodemon --inspect-brk=0.0.0.0 index.js",
+    "dev": "nodemon --inspect=0.0.0.0 index.js",
     "lint": "eslint --max-warnings 0 .",
     "format": "prettier-eslint --eslint-config-path ./.eslintrc.js --write '**/*.js'",
-    "mqecho": "node test/client/mqEcho",
     "start": "node index",
-    "dbsync": "node models/sync"
+    "dbsync": "node models/sync",
+    "generateToken": "node scripts/generateAdminAccessToken"
   },
   "keywords": [],
   "author": "",
