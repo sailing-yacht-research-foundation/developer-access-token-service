@@ -1,0 +1,50 @@
+.label {
+    margin-bottom: 0px;
+}
+
+
+.inputelm{
+    background-color: inherit;
+    border: none;
+    color: var(--light);
+    /* box-shadow: inset -.1rem -.1rem .4rem 0rem rgba(255, 255, 255,.5), 
+    inset .1rem .1rem .3rem .1rem rgba(0, 0, 0, 0.1); */
+    transition: box-shadow 0.2s ease-in-out;
+    /* border-radius: 5rem !important; */
+}
+
+.inputradius{
+    border-radius: 0px .8rem .8rem 0px !important;
+}
+
+.inputelm:focus{
+    border: 1px solid #f8f9fa !important;
+    background-color: #000;
+    color: var(--light);
+    box-shadow: inset -.1rem -.1rem .4rem .0rem rgba(255, 255, 255, 0.12), 
+    inset .1rem .1rem .3rem .15rem rgba(0, 0, 0, 0.44);
+}
+
+.haserror {
+    border: 1px solid #ff0303 !important;
+}
+
+.groupclass {
+    border-radius: 5rem !important;
+}
+.group{
+    margin-bottom: .5rem;
+    border-radius: 5rem !important;
+}
+
+.inputelm:disabled, .inputelm[readonly]{
+    background-color: unset !important;
+}
+
+.prepend{
+
+}
+
+.append{
+    border-radius: 0px .8rem .8rem 0px !important;
+}
