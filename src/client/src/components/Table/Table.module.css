@@ -1,0 +1,111 @@
+.table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.cell {
+    padding: .25rem .25rem;
+    
+}
+
+.row {
+    border-bottom : .1rem solid #8987874f;
+}
+
+.row:hover {
+    background-color: #adadad4f;
+}
+
+.head th {
+    padding: .5rem .5rem;
+    text-align: center;
+}
+
+.head {
+    border-bottom: .12rem solid #6a6a6ad8;
+}
+
+.body {
+    border-bottom: .12rem solid #6a6a6ad8;
+}
+
+/* .row:nth-child(even){
+    background-color: #6a6a6a96;
+} */
+
+.pagingitem {
+    margin: 0 .4rem;
+    /* border-radius: .5rem; */
+    min-width: 2rem;
+    max-height: 2.5rem;
+    text-align: center;
+}
+
+.activepage {
+    padding: .5rem;
+}
+
+.pagination {
+    flex-grow: 1;
+    flex-direction: row;
+    margin: 0 auto;
+}
+
+
+
+.left{
+    margin-left: auto;
+}
+
+.right{
+    margin-right: auto;
+}
+
+.pagetools{
+    margin-top: 1rem;
+    display: flex;
+    /* flex-direction: row; */
+}
+
+.goto{
+    width: 10rem;
+}
+
+.gotopage {
+    line-height: 1.25rem;
+    vertical-align: middle;
+}
+
+.pagesize{
+    width: 10rem;
+}
+
+.trloading {
+    font-size: smaller;
+    margin-top: 1rem;
+    padding: 0 .5rem;
+}
+
+/* .trloading > div:nth-child(2) {
+    flex-grow: 1;
+    text-align: right;
+} */
+
+.container {
+    padding: 1.5rem 1.5rem;
+}
+
+.tools {
+    /* padding: 1rem; */
+    text-align: right;
+}
+
+.tools > button,
+.tools > a {
+    margin: 0;
+}
+
+.tablecontainer {
+    overflow-x: auto;
+    padding-bottom: 1rem;
+}
