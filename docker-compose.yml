@@ -21,6 +21,7 @@ services:
       - TOKEN_EXPIRE=${TOKEN_EXPIRE}
     ports:
       - ${SERVER_PORT_MAP}:${PORT}
+      - 9229:9229
     depends_on:
       - db
   dev-token-client:
