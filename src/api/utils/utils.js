@@ -1,4 +1,4 @@
-// const db = require('../models');
+const db = require('../models');
 
 const BaseError = require('./BaseError');
 const ControllerError = require('./ControllerError');
@@ -112,15 +112,15 @@ exports.asyncHandler = (fn) =>
     return Promise.resolve(fnReturn).catch(next);
   };
 
-// exports.includeMeta = [
-//   {
-//     model: db.userProfile,
-//     as: 'createdBy',
-//     attributes: ['id', 'name'],
-//   },
-//   {
-//     model: db.userProfile,
-//     as: 'updatedBy',
-//     attributes: ['id', 'name'],
-//   },
-// ];
+exports.includeMeta = [
+  {
+    model: db.DevTokenAdmin,
+    as: 'createdBy',
+    attributes: ['id', 'name'],
+  },
+  {
+    model: db.DevTokenAdmin,
+    as: 'updatedBy',
+    attributes: ['id', 'name'],
+  },
+];
