@@ -1,13 +1,12 @@
-const dataAccess = require('../../dataAccess/v1/scope');
+const dataAccess = require('../../dataAccess/v1/action');
 const {
   setUpdateMeta,
   setCreateMeta,
   ServiceError,
   statusCodes,
-  createMeta,
 } = require('../../utils/utils');
 
-exports.upsert = async (id, { name, description } = {}, user) => {
+exports.upsert = async (id, { name, service } = {}, user) => {
   const isNew = !id;
 
   let res = isNew ? null : await dataAccess.getById(id);
@@ -20,7 +19,7 @@ exports.upsert = async (id, { name, description } = {}, user) => {
   }
 
   res.name = name;
-  res.description = description;
+  res.service = service;
 
   res = setUpdateMeta(res, user);
 
@@ -43,28 +42,6 @@ exports.delete = async (id) => {
   let result = await dataAccess.delete(id);
 
   if (!result) throw new ServiceError('Not Found', statusCodes.NOT_FOUND);
-
-  return result;
-};
-
-exports.updateActions = async ({ id, actionIds = [] }, user) => {
-  let scope = await dataAccess.getByIdWithoutDetail(id);
-
-  if (!scope) throw new ServiceError('Not Found', statusCodes.NOT_FOUND);
-
-  const meta = createMeta(user);
-
-  const result = await dataAccess.updateActions(
-    id,
-    actionIds.filter((t) => !!t),
-    meta,
-  );
-
-  return result;
-};
-
-exports.getActions = async (id, paging) => {
-  const result = await dataAccess.getActions(id, paging);
 
   return result;
 };

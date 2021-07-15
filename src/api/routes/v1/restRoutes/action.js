@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const pagination = require('../../../middlewares/pagination');
 
-const services = require('../../../services/v1/scope');
+const services = require('../../../services/v1/action');
 const { asyncHandler } = require('../../../utils/utils');
 
 router.get(
@@ -9,26 +9,6 @@ router.get(
   pagination,
   asyncHandler(async (req, res) => {
     let result = await services.getAll(req.paging);
-    res.send(result);
-  }),
-);
-
-router.put(
-  '/:id/actions',
-  asyncHandler(async (req, res) => {
-    let result = await services.updateActions(
-      { id: req.params.id, actionIds: req.body },
-      req.user,
-    );
-    res.send(result);
-  }),
-);
-
-router.get(
-  '/:id/actions',
-  pagination,
-  asyncHandler(async (req, res) => {
-    let result = await services.getActions(req.params.id, req.paging);
     res.send(result);
   }),
 );
