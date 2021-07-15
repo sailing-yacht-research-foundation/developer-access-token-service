@@ -30,6 +30,18 @@ exports.setUpdateMeta = (data = {}, user) => {
   return data;
 };
 
+exports.createMeta = (user) => {
+  const now = Date.now();
+  let data = {};
+  data.createdById = user.id;
+  data.createdAt = now;
+
+  data.updatedById = user.id;
+  data.updatedAt = now;
+
+  return data;
+};
+
 exports.validateSqlDataAuth = ({ editors = [], ownerId = '' } = {}, userId) => {
   let result = {
     isOwner: false,

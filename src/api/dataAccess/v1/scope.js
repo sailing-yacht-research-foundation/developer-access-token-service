@@ -1,4 +1,5 @@
 const uuid = require('uuid');
+const { Op } = require('../../models');
 const db = require('../../models');
 const { includeMeta } = require('../../utils/utils');
 
@@ -38,6 +39,12 @@ exports.getById = async (id) => {
   return result?.toJSON();
 };
 
+exports.getByIdWithoutDetail = async (id) => {
+  const result = await db.Scope.findByPk(id);
+
+  return result?.toJSON();
+};
+
 exports.delete = async (id) => {
   const data = await db.Scope.findByPk(id, {
     include,
@@ -52,4 +59,67 @@ exports.delete = async (id) => {
   }
 
   return data?.toJSON();
+};
+
+exports.updateActions = async (scopeId, actionIds = [], meta) => {
+  await Promise.all([
+    db.ScopeAction.destroy({
+      where: {
+        scopeId,
+      },
+    }),
+    db.Scope.update(
+      {
+        updateAt: meta.updatedAt,
+        updatedById: meta.updatedById,
+      },
+      {
+        where: {
+          id: scopeId,
+        },
+      },
+    ),
+  ]);
+
+  return await db.ScopeAction.bulkCreate(
+    actionIds.map((actionId) => ({
+      ...meta,
+      scopeId,
+      actionId,
+    })),
+  );
+};
+
+exports.getActions = async (id, paging) => {
+  const data = await db.Action.findAllWithPaging(
+    {
+      where: {
+        [Op.or]: [
+          {
+            name: {
+              [Op.iLike]: `%${paging.query}`,
+            },
+          },
+          {
+            service: {
+              [Op.iLike]: `%${paging.query}`,
+            },
+          },
+        ],
+      },
+      include: [
+        {
+          model: db.ScopeAction,
+          as: 'scopeActions',
+          attributes: [],
+          where: {
+            scopeId: id,
+          },
+        },
+      ],
+    },
+    paging,
+  );
+
+  return data;
 };

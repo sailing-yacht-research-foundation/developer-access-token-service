@@ -9,7 +9,7 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'postgres',
-    logging: false,
+    logging: true,
   },
 );
 
@@ -18,6 +18,7 @@ const db = {};
 db.Action = require('./entities/Action')(sequelize);
 db.DevTokenAdmin = require('./entities/DevTokenAdmin')(sequelize);
 db.Scope = require('./entities/Scope')(sequelize);
+db.ScopeAction = require('./entities/ScopeAction')(sequelize);
 db.Developer = require('./entities/Developer')(sequelize);
 db.DeveloperToken = require('./entities/DeveloperToken')(sequelize);
 
