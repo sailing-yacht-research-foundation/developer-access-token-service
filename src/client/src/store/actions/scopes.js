@@ -172,7 +172,7 @@ export const getById = ({ id }) => {
   };
 };
 
-export const getActions = (id, { page, size, q, sort, srdir }) => {
+export const getActions = (id) => {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       dispatch({
@@ -201,6 +201,41 @@ export const getActions = (id, { page, size, q, sort, srdir }) => {
             error: err,
           });
           return reject(err);
+        });
+    });
+  };
+};
+
+export const getUnassignedActions = (id, { page, size, q, sort, srdir }) => {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      dispatch({ type: actionTypes.GET_SCOPE_UNASSIGNED_ACTION_LIST });
+      axios.api
+        .get('/scopes/' + id + '/unassigned-actions', {
+          params: { page, size, q, sort, srdir },
+        })
+        .then((res) => {
+          if (res) {
+            dispatch({
+              type: actionTypes.GET_SCOPE_UNASSIGNED_ACTION_LIST_SUCCESS,
+              unassignedActions: res.data,
+            });
+            resolve(res.data);
+          } else {
+            const err = new Error('Unauthorized');
+            dispatch({
+              type: actionTypes.GET_SCOPE_UNASSIGNED_ACTION_LIST_FAILED,
+              error: err,
+            });
+            reject(err);
+          }
+        })
+        .catch((err) => {
+          dispatch({
+            type: actionTypes.GET_SCOPE_UNASSIGNED_ACTION_LIST_FAILED,
+            error: err,
+          });
+          reject(err);
         });
     });
   };

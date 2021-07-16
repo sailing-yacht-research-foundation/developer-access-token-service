@@ -28,7 +28,7 @@ router.get(
   '/:id/actions',
   pagination,
   asyncHandler(async (req, res) => {
-    let result = await services.getActions(req.params.id, req.paging);
+    let result = await services.getActions(req.params.id);
     res.send(result);
   }),
 );

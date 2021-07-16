@@ -36,8 +36,6 @@ services:
       - NODE_ENV=${NODE_ENV}
       - REACT_APP_STORAGE_API_BASE=${REACT_APP_STORAGE_API_BASE}
       - REACT_APP_STORAGE_AUTH_KEY=${REACT_APP_STORAGE_AUTH_KEY}
-    logging:
-      driver: none
     depends_on:
       - dev-token-api
     ports:

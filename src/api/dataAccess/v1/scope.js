@@ -90,36 +90,19 @@ exports.updateActions = async (scopeId, actionIds = [], meta) => {
   );
 };
 
-exports.getActions = async (id, paging) => {
-  const data = await db.Action.findAllWithPaging(
-    {
-      where: {
-        [Op.or]: [
-          {
-            name: {
-              [Op.iLike]: `%${paging.query}`,
-            },
-          },
-          {
-            service: {
-              [Op.iLike]: `%${paging.query}`,
-            },
-          },
-        ],
-      },
-      include: [
-        {
-          model: db.ScopeAction,
-          as: 'scopeActions',
-          attributes: [],
-          where: {
-            scopeId: id,
-          },
+exports.getActions = async (id) => {
+  const data = await db.Action.findAll({
+    include: [
+      {
+        model: db.ScopeAction,
+        as: 'scopeActions',
+        attributes: [],
+        where: {
+          scopeId: id,
         },
-      ],
-    },
-    paging,
-  );
+      },
+    ],
+  });
 
   return data;
 };

@@ -63,8 +63,8 @@ exports.updateActions = async ({ id, actionIds = [] }, user) => {
   return result;
 };
 
-exports.getActions = async (id, paging) => {
-  const result = await dataAccess.getActions(id, paging);
+exports.getActions = async (id) => {
+  const result = await dataAccess.getActions(id);
 
   return result;
 };
