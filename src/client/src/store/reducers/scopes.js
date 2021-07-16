@@ -8,6 +8,7 @@ const initialState = {
     scope: false,
     actions: true,
     unassignedActions: true,
+    updateActions: false,
   },
   scopes: {},
   detail: {},
@@ -96,6 +97,24 @@ const getUnassignedActionListFail = (state, scope) => {
   });
 };
 
+const updateActions = (state, scope) => {
+  return produce(state, (draft) => {
+    draft.loading.updateActions = true;
+  });
+};
+
+const updateActionsSuccess = (state, scope) => {
+  return produce(state, (draft) => {
+    draft.loading.updateActions = false;
+  });
+};
+
+const updateActionsFail = (state, scope) => {
+  return produce(state, (draft) => {
+    draft.loading.updateActions = false;
+  });
+};
+
 const getById = (state, scope) => {
   return produce(state, (draft) => {
     draft.loading.detail = true;
@@ -136,6 +155,23 @@ const deleteScopeSuccess = (state, scope) => {
 const deleteScopeFail = (state, scope) => {
   return produce(state, (draft) => {
     draft.loading.scope = false;
+  });
+};
+
+const removeAction = (state, action) => {
+  return produce(state, (draft) => {
+    if (action.action.isNew) {
+      draft.actions = draft.actions.filter((t) => t.id !== action.action.id);
+    } else {
+      const index = draft.actions.findIndex((t) => t.id === action.action.id);
+      draft.actions[index].deleted = !draft.actions[index].deleted;
+    }
+  });
+};
+
+const addAction = (state, action) => {
+  return produce(state, (draft) => {
+    draft.actions.push({ ...action.action, isNew: true });
   });
 };
 
@@ -190,6 +226,17 @@ const reducer = (state = initialState, scope) => {
     case actionTypes.DELETE_SCOPE_FAILED:
       return deleteScopeFail(state, scope);
 
+    case actionTypes.ADD_ACTION_TO_SCOPE:
+      return addAction(state, scope);
+    case actionTypes.REMOVE_ACTION_FROM_SCOPE:
+      return removeAction(state, scope);
+
+    case actionTypes.UPDATE_SCOPE_ACTIONS:
+      return updateActions(state, scope);
+    case actionTypes.UPDATE_SCOPE_ACTIONS_SUCCESS:
+      return updateActionsSuccess(state, scope);
+    case actionTypes.UPDATE_SCOPE_ACTIONS_FAILED:
+      return updateActionsFail(state, scope);
     default:
       return state;
   }

@@ -10,6 +10,7 @@ const UnassignedActions = ({
   loading,
   id,
   addAction,
+  actions,
 }) => {
   const [paging, setPaging] = useState({
     page: 1,
@@ -61,19 +62,32 @@ const UnassignedActions = ({
           <span className="text-xs">Loading...</span>
         ) : (
           ((unassignedActions || {}).rows || []).map((t) => {
+            const added =
+              actions.findIndex((existing) => t.id === existing) >= 0;
             return (
-              <Card key={t.id} className="p-2 pr-4 flex flex-row">
+              <Card
+                key={t.id}
+                className={[
+                  'p-2 pr-4 flex flex-row',
+                  added ? 'bg-gray-200' : '',
+                ].join(' ')}
+              >
                 <div className="flex flex-col gap-x-2 flex-grow text-sm">
+                  {added ? (
+                    <span className="text-xs text-indigo-500">added</span>
+                  ) : null}
                   <h6>{t.name}</h6>
                   <div className="text-gray-500 italic text-xs">
                     <i className="fa fa-server text-gray-400"></i> : {t.service}
                   </div>
                 </div>
                 <div>
-                  <i
-                    className="fa fa-plus text-indigo-700 cursor-pointer"
-                    onClick={() => addAction(t.id)}
-                  ></i>
+                  {added ? null : (
+                    <i
+                      className="fa fa-plus text-indigo-700 cursor-pointer"
+                      onClick={() => addAction(t)}
+                    ></i>
+                  )}
                 </div>
               </Card>
             );

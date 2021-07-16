@@ -206,6 +206,40 @@ export const getActions = (id) => {
   };
 };
 
+export const updateActions = (id, actions = []) => {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      dispatch({
+        type: actionTypes.UPDATE_SCOPE_ACTIONS,
+      });
+      axios.api
+        .put('/scopes/' + id + '/actions', actions)
+        .then((res) => {
+          if (res.data) {
+            dispatch({
+              type: actionTypes.UPDATE_SCOPE_ACTIONS_SUCCESS,
+              actions: res.data,
+            });
+          } else {
+            dispatch({
+              type: actionTypes.UPDATE_SCOPE_ACTIONS_FAILED,
+              actions: {},
+            });
+          }
+
+          return resolve(res.data);
+        })
+        .catch((err) => {
+          dispatch({
+            type: actionTypes.UPDATE_SCOPE_ACTIONS_FAILED,
+            error: err,
+          });
+          return reject(err);
+        });
+    });
+  };
+};
+
 export const getUnassignedActions = (id, { page, size, q, sort, srdir }) => {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
@@ -237,6 +271,24 @@ export const getUnassignedActions = (id, { page, size, q, sort, srdir }) => {
           });
           reject(err);
         });
+    });
+  };
+};
+
+export const addAction = (action) => {
+  return (dispatch) => {
+    dispatch({
+      type: actionTypes.ADD_ACTION_TO_SCOPE,
+      action: action,
+    });
+  };
+};
+
+export const removeAction = (action) => {
+  return (dispatch) => {
+    dispatch({
+      type: actionTypes.REMOVE_ACTION_FROM_SCOPE,
+      action: action,
     });
   };
 };

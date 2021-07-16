@@ -16,6 +16,10 @@ const Detail = ({
   create,
   getActions,
   actions,
+  addAction,
+  removeAction,
+  updateActions,
+  getUnassignedActions,
 }) => {
   const { id } = useParams();
 
@@ -44,15 +48,20 @@ const Detail = ({
 
   const isNew = id === 'new' || (id ? false : true);
 
-  const history = useHistory();
-
   const saveHandler = async () => {
     if (isNew) {
       await create(form);
     } else {
       await update(id, form);
     }
-    history.push('/scopes');
+  };
+
+  const saveActions = async () => {
+    await updateActions(
+      id,
+      actions.filter((t) => !t.deleted).map((t) => t.id),
+    );
+    await Promise.all([getUnassignedActions(id, {}), getActions(id)]);
   };
 
   return (
@@ -87,6 +96,11 @@ const Detail = ({
               return (
                 <Card key={t.id} className="p-2 pr-4 flex flex-row">
                   <div className="flex flex-col gap-x-2 flex-grow  text-sm">
+                    {t.isNew ? (
+                      <span className="text-xs text-indigo-500">new</span>
+                    ) : t.deleted ? (
+                      <span className="text-xs text-red-500">removed</span>
+                    ) : null}
                     <h6>{t.name}</h6>
                     <div className="text-gray-500 italic text-xs">
                       <i className="fa fa-server text-gray-400"></i> :{' '}
@@ -94,19 +108,30 @@ const Detail = ({
                     </div>
                   </div>
                   <div>
-                    <i className="fa fa-times text-red-600 cursor-pointer"></i>
+                    {t.deleted ? (
+                      <i
+                        className="fa fa-undo-alt text-indigo-500 cursor-pointer"
+                        onClick={() => removeAction(t)}
+                      ></i>
+                    ) : (
+                      <i
+                        className="fa fa-times text-red-600 cursor-pointer"
+                        onClick={() => removeAction(t)}
+                      ></i>
+                    )}
                   </div>
                 </Card>
               );
             })}
           </div>
-          <Button clicked={saveHandler}>Save</Button>
+          <Button clicked={saveActions}>Save</Button>
         </Card>
         <Card className="flex flex-col p-8 gap-y-4">
           <h2 className="font-semibold">Unassigned Actions</h2>
           <UnassignedActionsTable
             id={id}
-            addAction={() => {}}
+            addAction={addAction}
+            actions={(actions || []).map((t) => t.id)}
           ></UnassignedActionsTable>
         </Card>
       </div>
@@ -129,6 +154,12 @@ const mapDispatchToProps = (dispatch) => {
     update: (id, data) => dispatch(scopeActions.update(id, data)),
     create: (data) => dispatch(scopeActions.create(data)),
     getActions: (id) => dispatch(scopeActions.getActions(id)),
+    addAction: (action) => dispatch(scopeActions.addAction(action)),
+    removeAction: (action) => dispatch(scopeActions.removeAction(action)),
+    updateActions: (id, actions) =>
+      dispatch(scopeActions.updateActions(id, actions)),
+    getUnassignedActions: (id, paging) =>
+      dispatch(scopeActions.getUnassignedActions(id, paging)),
   };
 };
 
