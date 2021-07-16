@@ -1,7 +1,7 @@
 const uuid = require('uuid');
 const { Op } = require('../../models');
 const db = require('../../models');
-const { includeMeta } = require('../../utils/utils');
+const { includeMeta, distinctArray } = require('../../utils/utils');
 
 const include = [...includeMeta];
 
@@ -82,7 +82,7 @@ exports.updateActions = async (scopeId, actionIds = [], meta) => {
   ]);
 
   return await db.ScopeAction.bulkCreate(
-    actionIds.map((actionId) => ({
+    distinctArray(actionIds).map((actionId) => ({
       ...meta,
       scopeId,
       actionId,
@@ -114,6 +114,48 @@ exports.getActions = async (id, paging) => {
           attributes: [],
           where: {
             scopeId: id,
+          },
+        },
+      ],
+    },
+    paging,
+  );
+
+  return data;
+};
+
+exports.getUnassignedActions = async (id, paging) => {
+  const data = await db.Action.findAllWithPaging(
+    {
+      where: {
+        [Op.or]: [
+          {
+            name: {
+              [Op.iLike]: `%${paging.query}`,
+            },
+          },
+          {
+            service: {
+              [Op.iLike]: `%${paging.query}`,
+            },
+          },
+        ],
+        '$scopeActions.id$': {
+          [Op.is]: null,
+        },
+      },
+      subQuery: false,
+      include: [
+        {
+          model: db.ScopeAction,
+          as: 'scopeActions',
+          required: false,
+          attributes: [],
+          where: {
+            scopeId: id,
+            // id: {
+            //   [Op.is]: null,
+            // },
           },
         },
       ],

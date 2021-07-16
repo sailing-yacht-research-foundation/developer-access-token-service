@@ -136,3 +136,7 @@ exports.includeMeta = [
     attributes: ['id', 'name'],
   },
 ];
+
+exports.distinctArray = (data = []) => {
+  return [...new Set(data)];
+};

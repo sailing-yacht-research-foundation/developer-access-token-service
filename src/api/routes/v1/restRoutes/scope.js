@@ -34,6 +34,15 @@ router.get(
 );
 
 router.get(
+  '/:id/unassigned-actions',
+  pagination,
+  asyncHandler(async (req, res) => {
+    let result = await services.getUnassignedActions(req.params.id, req.paging);
+    res.send(result);
+  }),
+);
+
+router.get(
   '/:id',
   asyncHandler(async (req, res) => {
     let result = await services.getById(req.params.id);
