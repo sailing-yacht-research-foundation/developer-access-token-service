@@ -68,3 +68,9 @@ exports.getActions = async (id, paging) => {
 
   return result;
 };
+
+exports.getUnassignedActions = async (id, paging) => {
+  const result = await dataAccess.getUnassignedActions(id, paging);
+
+  return result;
+};
