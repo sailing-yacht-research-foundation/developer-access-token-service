@@ -18,6 +18,14 @@ const Home = asyncComponent(() => {
   return import('./pages/Home');
 });
 
+const Actions = asyncComponent(() => {
+  return import('./pages/Actions');
+});
+
+const ActionDetail = asyncComponent(() => {
+  return import('./pages/Actions/Detail');
+});
+
 const App = ({ validateToken: validateTokenProps, user, loading }) => {
   const { pathname } = useLocation();
   const validateToken = validateTokenProps;
@@ -40,6 +48,8 @@ const App = ({ validateToken: validateTokenProps, user, loading }) => {
   } else if ((token && typeof token !== 'undefined') || isLogin) {
     return (
       <Switch>
+        <Route path="/actions/:id" exact component={ActionDetail} />
+        <Route path="/actions" exact component={Actions} />
         <Route path="/login" component={Login} />
         <Route path="/" exact component={Home} />
       </Switch>

@@ -1,4 +1,5 @@
 const uuid = require('uuid');
+const { Op } = require('../../models');
 const db = require('../../models');
 const { includeMeta } = require('../../utils/utils');
 
@@ -19,9 +20,18 @@ exports.getAll = async (paging = {}) => {
   const result = await db.Action.findAllWithPaging(
     {
       where: {
-        name: {
-          [db.Op.iLike]: `%${paging.query}%`,
-        },
+        [Op.or]: [
+          {
+            name: {
+              [Op.iLike]: `%${paging.query}%`,
+            },
+          },
+          {
+            service: {
+              [Op.iLike]: `%${paging.query}%`,
+            },
+          },
+        ],
       },
     },
     paging,

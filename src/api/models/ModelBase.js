@@ -48,6 +48,7 @@ class ModelBase extends Model {
       srdir: srdirQuery,
       q: query,
       draw: draw,
+      pageCount: Math.ceil(result.count / pagingSize),
     };
   }
 }
