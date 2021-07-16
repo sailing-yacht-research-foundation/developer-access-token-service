@@ -9461,7 +9461,7 @@
 									]
 								},
 								{
-									"name": "update Copy",
+									"name": "list assigned",
 									"protocolProfileBehavior": {
 										"disableBodyPruning": true
 									},
@@ -9499,110 +9499,48 @@
 											]
 										}
 									},
-									"response": [
-										{
-											"name": "update Copy",
-											"originalRequest": {
-												"method": "GET",
-												"header": [],
-												"body": {
-													"mode": "raw",
-													"raw": "[\"cfdad806-1aaf-46b0-a5e6-7895d7d53156\",\"65af2fd7-9a0e-4ff5-b535-8e401ee56f96\"]",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}{{version}}/scopes/272880f1-24b0-4fc7-8b40-48fa5b19ad83/actions",
-													"host": [
-														"{{baseUrl}}{{version}}"
-													],
-													"path": [
-														"scopes",
-														"272880f1-24b0-4fc7-8b40-48fa5b19ad83",
-														"actions"
-													]
+									"response": []
+								},
+								{
+									"name": "list unassigned",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
 												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "json",
-											"header": [
-												{
-													"key": "Content-Security-Policy",
-													"value": "default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
-												},
-												{
-													"key": "X-DNS-Prefetch-Control",
-													"value": "off"
-												},
-												{
-													"key": "Expect-CT",
-													"value": "max-age=0"
-												},
-												{
-													"key": "X-Frame-Options",
-													"value": "SAMEORIGIN"
-												},
-												{
-													"key": "Strict-Transport-Security",
-													"value": "max-age=15552000; includeSubDomains"
-												},
-												{
-													"key": "X-Download-Options",
-													"value": "noopen"
-												},
-												{
-													"key": "X-Content-Type-Options",
-													"value": "nosniff"
-												},
-												{
-													"key": "X-Permitted-Cross-Domain-Policies",
-													"value": "none"
-												},
-												{
-													"key": "Referrer-Policy",
-													"value": "no-referrer"
-												},
-												{
-													"key": "X-XSS-Protection",
-													"value": "0"
-												},
-												{
-													"key": "Access-Control-Allow-Origin",
-													"value": "*"
-												},
-												{
-													"key": "Content-Type",
-													"value": "application/json; charset=utf-8"
-												},
-												{
-													"key": "Content-Length",
-													"value": "648"
-												},
-												{
-													"key": "ETag",
-													"value": "W/\"288-m8DXRPVGjnpR/kis/rQIhBv7PgA\""
-												},
-												{
-													"key": "Date",
-													"value": "Thu, 15 Jul 2021 15:56:31 GMT"
-												},
-												{
-													"key": "Connection",
-													"value": "keep-alive"
-												},
-												{
-													"key": "Keep-Alive",
-													"value": "timeout=5"
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "[\"cfdad806-1aaf-46b0-a5e6-7895d7d53156\",\"65af2fd7-9a0e-4ff5-b535-8e401ee56f96\"]",
+											"options": {
+												"raw": {
+													"language": "json"
 												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}{{version}}/scopes/272880f1-24b0-4fc7-8b40-48fa5b19ad83/unassigned-actions",
+											"host": [
+												"{{baseUrl}}{{version}}"
 											],
-											"cookie": [],
-											"body": "{\n    \"count\": 2,\n    \"rows\": [\n        {\n            \"id\": \"cfdad806-1aaf-46b0-a5e6-7895d7d53156\",\n            \"name\": \"delete_calendar\",\n            \"service\": \"live-data-server\",\n            \"createdAt\": \"2021-07-15T15:49:36.437Z\",\n            \"updatedAt\": \"2021-07-15T15:49:36.437Z\",\n            \"createdById\": \"db37a959-2825-4ab1-a295-6931917ee241\",\n            \"updatedById\": \"db37a959-2825-4ab1-a295-6931917ee241\"\n        },\n        {\n            \"id\": \"65af2fd7-9a0e-4ff5-b535-8e401ee56f96\",\n            \"name\": \"update_calendar\",\n            \"service\": \"live-data-server\",\n            \"createdAt\": \"2021-07-15T15:49:31.538Z\",\n            \"updatedAt\": \"2021-07-15T15:49:31.538Z\",\n            \"createdById\": \"db37a959-2825-4ab1-a295-6931917ee241\",\n            \"updatedById\": \"db37a959-2825-4ab1-a295-6931917ee241\"\n        }\n    ],\n    \"page\": 1,\n    \"size\": 10,\n    \"sort\": \"updatedAt\",\n    \"srdir\": \"DESC\",\n    \"q\": \"\"\n}"
+											"path": [
+												"scopes",
+												"272880f1-24b0-4fc7-8b40-48fa5b19ad83",
+												"unassigned-actions"
+											]
 										}
-									]
+									},
+									"response": []
 								}
 							]
 						},
