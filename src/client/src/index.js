@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
 import authReducer from './store/reducers/auth';
+import actionsReducer from './store/reducers/actions';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -20,6 +21,7 @@ const composeEnhancers =
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  actions: actionsReducer,
 });
 
 const store = createStore(

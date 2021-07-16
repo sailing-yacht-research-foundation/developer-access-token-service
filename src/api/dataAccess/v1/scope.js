@@ -131,12 +131,12 @@ exports.getUnassignedActions = async (id, paging) => {
         [Op.or]: [
           {
             name: {
-              [Op.iLike]: `%${paging.query}`,
+              [Op.iLike]: `%${paging.query}%`,
             },
           },
           {
             service: {
-              [Op.iLike]: `%${paging.query}`,
+              [Op.iLike]: `%${paging.query}%`,
             },
           },
         ],

@@ -1,6 +1,7 @@
 FROM node:alpine
-WORKDIR /app
+WORKDIR /usr/src/app
 COPY ./package.json ./
+RUN chown -R node.node /usr/src/app
 RUN npm install
 COPY . .
 # EXPOSE 3000

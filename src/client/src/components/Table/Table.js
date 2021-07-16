@@ -114,9 +114,7 @@ const SortBy = ({ children, onClick, currentSort = false }) => {
   );
 };
 
-const defaultSortByItems = [
-  { label: 'Terbaru', sort: 'createdAt', sortdir: '0' },
-];
+const defaultSortByItems = [{ label: 'Latest', sort: 'createdAt', srtdir: -1 }];
 
 const Table = ({
   columns,
@@ -182,9 +180,9 @@ const Table = ({
   React.useEffect(() => {
     fetchData({
       page: pageIndex + 1,
-      pageSize,
-      search: { q: search },
-      sortdir: sort.sortdir,
+      size: pageSize,
+      q: search,
+      srdir: sort.srdir,
       sort: sort.sort,
     }).then((res) => setExportUrl(res.url));
   }, [fetchData, pageIndex, pageSize, search, sort]);
@@ -192,9 +190,9 @@ const Table = ({
   React.useEffect(() => {
     fetchData({
       page: 1,
-      pageSize: 10,
-      search: { q: search },
-      sortdir: sort.sortdir,
+      size: 10,
+      q: search,
+      srdir: sort.srdir,
       sort: sort.sort,
     }).then((res) => setExportUrl(res.url));
   }, []);
@@ -207,10 +205,10 @@ const Table = ({
     setShowSort((prevstate) => !prevstate);
   };
 
-  const onSelectSort = ({ sort, sortdir, label }) => {
+  const onSelectSort = ({ sort, srdir, label }) => {
     setSort({
       sort,
-      sortdir,
+      srdir,
       label,
     });
     setShowSort(false);
@@ -234,7 +232,7 @@ const Table = ({
           }}
           searchDelay={450}
           //value={search}
-          placeholder="Cari..."
+          placeholder="Search..."
         ></SearchBar>
         <div>
           <button
@@ -248,7 +246,7 @@ const Table = ({
             aria-haspopup="true"
           >
             <span className="sr-only">Open user menu</span>
-            urutkan
+            sort
           </button>
           {showSort ? (
             <div
@@ -368,10 +366,10 @@ const Table = ({
         ) : (
           <>
             <div>
-              Menampilkan {page.length} dari {totalItem} baris
+              Showing {page.length} from {totalItem} rows
             </div>
             <div className="md:flex-grow md:text-right">
-              Halaman {pageIndex + 1} dari {pageOptions.length}{' '}
+              Page {pageIndex + 1} of {Math.ceil(totalItem / page.length)}{' '}
             </div>
           </>
         )}
