@@ -7,9 +7,11 @@ const initialState = {
     detail: true,
     scope: false,
     actions: true,
+    unassignedActions: true,
   },
   scopes: {},
   detail: {},
+  actions: [],
   unassignedActions: {},
 };
 
@@ -61,14 +63,36 @@ const getActionList = (state, scope) => {
 const getActionListSuccess = (state, scope) => {
   return produce(state, (draft) => {
     draft.loading.actions = false;
-    draft.detail.actions = scope.actions;
+    draft.actions = scope.actions;
+
+    draft.actions.sort((a, b) => (a.service > b.service ? 1 : -1));
   });
 };
 
 const getActionListFail = (state, scope) => {
   return produce(state, (draft) => {
     draft.loading.actions = false;
-    draft.detail.actions = [];
+    draft.actions = [];
+  });
+};
+
+const getUnassignedActionList = (state, scope) => {
+  return produce(state, (draft) => {
+    draft.loading.unassignedActions = true;
+  });
+};
+
+const getUnassignedActionListSuccess = (state, scope) => {
+  return produce(state, (draft) => {
+    draft.loading.unassignedActions = false;
+    draft.unassignedActions = scope.unassignedActions;
+  });
+};
+
+const getUnassignedActionListFail = (state, scope) => {
+  return produce(state, (draft) => {
+    draft.loading.unassignedActions = false;
+    draft.unassignedActions = {};
   });
 };
 
@@ -144,6 +168,13 @@ const reducer = (state = initialState, scope) => {
       return getActionListSuccess(state, scope);
     case actionTypes.GET_SCOPE_ACTION_LIST_FAILED:
       return getActionListFail(state, scope);
+
+    case actionTypes.GET_SCOPE_UNASSIGNED_ACTION_LIST:
+      return getUnassignedActionList(state, scope);
+    case actionTypes.GET_SCOPE_UNASSIGNED_ACTION_LIST_SUCCESS:
+      return getUnassignedActionListSuccess(state, scope);
+    case actionTypes.GET_SCOPE_UNASSIGNED_ACTION_LIST_FAILED:
+      return getUnassignedActionListFail(state, scope);
 
     case actionTypes.GET_SCOPE_BY_ID:
       return getById(state, scope);

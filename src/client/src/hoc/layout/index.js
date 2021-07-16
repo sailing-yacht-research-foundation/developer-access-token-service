@@ -82,7 +82,7 @@ const Layout = ({ children, title, user = {}, logout, onClick }) => {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src={profilePict}
+                        // src={profilePict}
                         alt=""
                       />
                     </button>
