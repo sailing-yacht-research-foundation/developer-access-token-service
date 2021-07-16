@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { connect } from 'react-redux';
 import Button from '../../components/Button';
 import Table from '../../components/Table/Table';
-import * as actionActions from '../../store/actions/actions';
+import * as scopeActions from '../../store/actions/scopes';
 import { formatString } from '../../utils/dateUtil';
 import LinkButton from '../../components/LinkButton';
 import Modal from '../../components/Modal/Modal';
@@ -11,47 +11,45 @@ import Modal from '../../components/Modal/Modal';
 const sortByItems = [
   { label: 'Newest', sort: 'createdAt', srdir: -1 },
   { label: 'Latest Updated', sort: 'updatedAt', srdir: -1 },
-  { label: 'Service Asc', sort: 'service', srdir: 1 },
-  { label: 'Service Desc', sort: 'service', srdir: -1 },
   { label: 'Name Asc', sort: 'name', srdir: 1 },
   { label: 'Name Desc', sort: 'name', srdir: -1 },
 ];
 
-const Actions = ({ loading, getList, deleteAction, actions, userData }) => {
+const Scopes = ({ loading, getList, deleteScope, scopes, userData }) => {
   const tool = (
     <>
       <LinkButton
         size="sm"
         className="btn-sm flex-grow-0 leading-6"
-        to={'/actions/new'}
+        to={'/scopes/new'}
       >
         <i className="fa fa-plus mr-2 my-auto "></i>Add New
       </LinkButton>
     </>
   );
-  const doDeleteActions = (id) => {
-    deleteAction(id).then((res) => {
+  const doDeleteScopes = (id) => {
+    deleteScope(id).then((res) => {
       onConfirmClosed();
       // this.props.showSnackBar("Delete Success", { success: true })
     });
   };
-  const onConfirmDelete = (actionId) => {
+  const onConfirmDelete = (scopeId) => {
     setConfirmState({
       show: true,
-      current: actions.rows.find((t) => t.id === actionId),
+      current: scopes.rows.find((t) => t.id === scopeId),
     });
   };
 
   const columns = [
     {
-      Header: 'Actions',
+      Header: 'Scopes',
       accessor: 'id',
       default: '-',
-      className: 'og-table-action ',
+      className: 'og-table-scope ',
       Cell: ({ value, row: { values: rowVal } }) => {
         return (
           <div className="flex flex-row w-full gap-x-2 place-content-center">
-            <LinkButton size="sm" to={'/actions/' + value}>
+            <LinkButton size="sm" to={'/scopes/' + value}>
               Edit
             </LinkButton>
             <Button
@@ -68,17 +66,17 @@ const Actions = ({ loading, getList, deleteAction, actions, userData }) => {
     {
       Header: 'Name',
       accessor: 'name',
-      className: '',
+      className: 'text-center',
       headerStyle: {
         width: '10rem',
       },
     },
     {
-      Header: 'Service',
-      accessor: 'service',
-      className: 'text-center',
+      Header: 'Description',
+      accessor: 'description',
+      className: '',
       headerStyle: {
-        width: '10rem',
+        width: '20rem',
       },
     },
     {
@@ -99,7 +97,7 @@ const Actions = ({ loading, getList, deleteAction, actions, userData }) => {
     },
   ];
 
-  const actionitems = (actions || {}).rows || [];
+  const scopeitems = (scopes || {}).rows || [];
 
   const [confirmState, setConfirmState] = useState({
     show: false,
@@ -114,14 +112,14 @@ const Actions = ({ loading, getList, deleteAction, actions, userData }) => {
   };
 
   return (
-    <Layout title="Actions">
+    <Layout title="Scopes">
       <Table
         columns={columns}
         loading={loading}
         fetchData={getList}
-        data={actionitems}
-        count={actions.count}
-        pageCount={actions.pageCount}
+        data={scopeitems}
+        count={scopes.count}
+        pageCount={scopes.pageCount}
         exportCsv={false}
         tools={tool}
         sortByItems={sortByItems}
@@ -131,7 +129,7 @@ const Actions = ({ loading, getList, deleteAction, actions, userData }) => {
         <p className="text-center">Are you sure deleting :</p>
         <ol>
           <li>
-            Action : <strong>{confirmState?.current?.name}</strong>
+            Scope : <strong>{confirmState?.current?.name}</strong>
           </li>
           <li>Service : {confirmState?.current?.service}</li>
         </ol>
@@ -139,7 +137,7 @@ const Actions = ({ loading, getList, deleteAction, actions, userData }) => {
           <Button
             size="md"
             className="ml-auto"
-            clicked={() => doDeleteActions(confirmState?.current?.id)}
+            clicked={() => doDeleteScopes(confirmState?.current?.id)}
           >
             Delete
           </Button>
@@ -159,17 +157,17 @@ const Actions = ({ loading, getList, deleteAction, actions, userData }) => {
 
 const mapStateToProps = (state) => {
   return {
-    actions: state.actions.actions,
-    loading: state.actions.loading.actions,
+    scopes: state.scopes.scopes,
+    loading: state.scopes.loading.scopes,
     userData: state.auth.user,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getList: (dtRequest) => dispatch(actionActions.getList(dtRequest)),
-    deleteAction: (id) => dispatch(actionActions.deleteAction(id)),
+    getList: (dtRequest) => dispatch(scopeActions.getList(dtRequest)),
+    deleteScope: (id) => dispatch(scopeActions.deleteScope(id)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Actions);
+export default connect(mapStateToProps, mapDispatchToProps)(Scopes);

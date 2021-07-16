@@ -11,6 +11,7 @@ import thunk from 'redux-thunk';
 
 import authReducer from './store/reducers/auth';
 import actionsReducer from './store/reducers/actions';
+import scopesReducer from './store/reducers/scopes';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -22,6 +23,7 @@ const composeEnhancers =
 const rootReducer = combineReducers({
   auth: authReducer,
   actions: actionsReducer,
+  scopes: scopesReducer,
 });
 
 const store = createStore(

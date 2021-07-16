@@ -47,14 +47,19 @@ const Layout = ({ children, title, user = {}, logout, onClick }) => {
                   >
                     Home
                   </Link>
-                  {user.type === 'SUPER_ADMIN' ? (
-                    <Link
-                      to="/users"
-                      className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
-                    >
-                      User
-                    </Link>
-                  ) : null}
+                  <Link
+                    to="/actions"
+                    className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    Actions
+                  </Link>
+                  <Link
+                    to="/scopes"
+                    className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    Scopes
+                  </Link>
+
                   {/* <a href="#"></a> */}
                 </div>
               </div>
@@ -157,14 +162,12 @@ const Layout = ({ children, title, user = {}, logout, onClick }) => {
             >
               Home
             </Link>
-            {user.type === 'SUPER_ADMIN' ? (
-              <Link
-                to="/users"
-                className="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
-              >
-                User
-              </Link>
-            ) : null}
+            <Link
+              to="/"
+              className="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
+            >
+              Actions
+            </Link>
           </div>
           <div className="pt-4 pb-3 border-t border-gray-700">
             <div className="flex items-center px-5">
@@ -219,8 +222,8 @@ const Layout = ({ children, title, user = {}, logout, onClick }) => {
       </nav>
 
       <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto md:py-6 py-2 px-4 sm:px-6 lg:px-8 ">
-          <h1>{title}</h1>
+        <div className="max-w-7xl mx-auto md:py-3 py-2 px-4 sm:px-6 lg:px-8 ">
+          <h1 className="font-medium">{title}</h1>
         </div>
       </header>
       <main>
