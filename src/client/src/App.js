@@ -4,6 +4,7 @@ import {
   Redirect,
   matchPath,
   useLocation,
+  useHistory,
 } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { useEffect } from 'react';
@@ -39,10 +40,12 @@ const App = ({ validateToken: validateTokenProps, user, loading }) => {
   const validateToken = validateTokenProps;
 
   const token = storageGetItem(config.AUTH_STORAGE_KEY);
-
+  const history = useHistory();
   useEffect(() => {
     if (isNullOrEmpty(user)) {
-      validateToken();
+      validateToken().catch(() => {
+        history.push('/login');
+      });
     }
   }, [token]);
 
@@ -51,6 +54,7 @@ const App = ({ validateToken: validateTokenProps, user, loading }) => {
     path: '/login',
   });
 
+  debugger;
   if (loading) {
     return <div>Loading...</div>;
   } else if ((token && typeof token !== 'undefined') || isLogin) {

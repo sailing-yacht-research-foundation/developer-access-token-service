@@ -23,6 +23,7 @@ export const validateToken = () => {
             });
             resolve(res.data);
           } else {
+            console.log(res.data);
             const err = new Error('Unauthorized');
             dispatch({
               type: actionTypes.VALIDATE_TOKEN_FAILED,
@@ -31,6 +32,7 @@ export const validateToken = () => {
           }
         })
         .catch((err) => {
+          console.log(err);
           dispatch({
             type: actionTypes.VALIDATE_TOKEN_FAILED,
           });

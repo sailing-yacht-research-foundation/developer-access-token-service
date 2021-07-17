@@ -80,11 +80,9 @@ const Layout = ({ children, title, user = {}, logout, onClick }) => {
                       aria-haspopup="true"
                     >
                       <span className="sr-only">Open user menu</span>
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        // src={profilePict}
-                        alt=""
-                      />
+                      <div className="h-8 w-8 rounded-full bg-green-700 text-xl font-semibold text-white">
+                        {(user?.name || [''])[0]}
+                      </div>
                     </button>
                   </div>
                   {showProfile ? (
@@ -172,11 +170,9 @@ const Layout = ({ children, title, user = {}, logout, onClick }) => {
           <div className="pt-4 pb-3 border-t border-gray-700">
             <div className="flex items-center px-5">
               <div className="flex-shrink-0" onClick={onShowProfile}>
-                <img
-                  className="h-10 w-10 rounded-full"
-                  src={profilePict}
-                  alt=""
-                />
+                <div className="h-10 w-10 rounded-full">
+                  {(user?.name || [''])[0]}
+                </div>
               </div>
               <div className="ml-3">
                 <div className="text-base font-medium leading-none text-white">
