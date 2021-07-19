@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const ModelBase = require('../ModelBase');
 
-class Scope extends ModelBase {
+class ScopeAction extends ModelBase {
   static associate(models) {
     this.belongsTo(models.Action, {
       as: 'action',
@@ -18,7 +18,7 @@ class Scope extends ModelBase {
 }
 
 module.exports = (sequelize) => {
-  Scope.init(
+  ScopeAction.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -32,5 +32,5 @@ module.exports = (sequelize) => {
       sequelize,
     },
   );
-  return Scope;
+  return ScopeAction;
 };

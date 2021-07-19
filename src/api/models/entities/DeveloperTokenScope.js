@@ -1,25 +1,24 @@
 const { DataTypes } = require('sequelize');
 const ModelBase = require('../ModelBase');
 
-class DeveloperToken extends ModelBase {
+class DeveloperTokenScope extends ModelBase {
   static associate(models) {
-    this.belongsToMany(models.Scope, {
-      through: models.DeveloperTokenScope,
-      as: 'tokenScopes',
+    this.belongsTo(models.DeveloperToken, {
+      as: 'developerTokens',
       constraints: false,
       foreignKey: 'developerTokenId',
     });
 
-    this.belongsTo(models.Developer, {
-      as: 'developer',
-      foreignKey: 'developerId',
+    this.belongsTo(models.Scope, {
+      as: 'scope',
       constraints: false,
+      foreignKey: 'scopeId',
     });
   }
 }
 
 module.exports = (sequelize) => {
-  DeveloperToken.init(
+  DeveloperTokenScope.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -27,14 +26,11 @@ module.exports = (sequelize) => {
         allowNull: false,
         primaryKey: true,
       },
-      name: {
-        type: DataTypes.STRING,
-      },
     },
     {
-      modelName: 'DeveloperToken',
+      modelName: 'DeveloperTokenScope',
       sequelize,
     },
   );
-  return DeveloperToken;
+  return DeveloperTokenScope;
 };
