@@ -5,6 +5,9 @@ const validation = require('../../../middlewares/validation');
 
 const services = require('../../../services/v1/developer');
 const { asyncHandler } = require('../../../utils/utils');
+const developerTokenRouter = require('../../../routes/v1/restRoutes/developerToken');
+
+router.use('/:developerId/tokens', developerTokenRouter);
 
 router.get(
   '/',

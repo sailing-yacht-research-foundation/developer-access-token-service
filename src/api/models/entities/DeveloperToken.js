@@ -5,7 +5,7 @@ class DeveloperToken extends ModelBase {
   static associate(models) {
     this.belongsToMany(models.Scope, {
       through: models.DeveloperTokenScope,
-      as: 'tokenScopes',
+      as: 'developerTokenScopes',
       constraints: false,
       foreignKey: 'developerTokenId',
     });

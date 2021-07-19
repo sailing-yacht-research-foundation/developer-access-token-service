@@ -3,17 +3,34 @@ const { Op } = require('../../models');
 const db = require('../../models');
 const { includeMeta } = require('../../utils/utils');
 
-const include = [...includeMeta];
+const include = [
+  {
+    as: 'developer',
+    model: db.Developer,
+  },
+  ...includeMeta,
+];
 
-exports.upsert = async (id, data = {}) => {
-  if (!id) id = uuid.v4();
+exports.create = async (data = {}) => {
+  const id = uuid.v4();
+  const [[result], bulk] = await Promise.all([
+    db.DeveloperToken.upsert({
+      ...data,
+      scopeIds: null,
+      id: id,
+    }),
+    db.DeveloperTokenScope.bulkCreate(
+      data.scopeIds.map((t) => ({
+        developerTokenId: id,
+        scopeId: t,
+      })),
+      {
+        returning: false,
+      },
+    ),
+  ]);
 
-  const [result] = await db.DeveloperToken.upsert({
-    ...data,
-    id,
-  });
-
-  return result?.toJSON();
+  return { ...result?.toJSON(), scopeIds: data.scopeIds };
 };
 
 exports.getAll = async (paging = {}) => {
@@ -23,11 +40,6 @@ exports.getAll = async (paging = {}) => {
         [Op.or]: [
           {
             name: {
-              [Op.iLike]: `%${paging.query}%`,
-            },
-          },
-          {
-            email: {
               [Op.iLike]: `%${paging.query}%`,
             },
           },
@@ -62,4 +74,41 @@ exports.delete = async (id) => {
   }
 
   return data?.toJSON();
+};
+
+exports.getAllByDeveloper = async (devId, paging = {}) => {
+  const result = await db.DeveloperToken.findAllWithPaging(
+    {
+      where: {
+        developerId: devId,
+        [Op.or]: [
+          {
+            name: {
+              [Op.iLike]: `%${paging.query}%`,
+            },
+          },
+        ],
+      },
+    },
+    paging,
+  );
+
+  return result;
+};
+
+exports.getScopes = async (id) => {
+  const result = await db.Scope.findAll({
+    include: [
+      {
+        model: db.DeveloperTokenScope,
+        as: 'developerTokens',
+        attributes: [],
+        where: {
+          developerTokenId: id,
+        },
+      },
+    ],
+  });
+
+  return result;
 };

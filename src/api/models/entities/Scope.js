@@ -16,6 +16,12 @@ class Scope extends ModelBase {
       constraints: false,
       foreignKey: 'scopeId',
     });
+
+    this.hasMany(models.DeveloperTokenScope, {
+      as: 'developerTokens',
+      constraints: false,
+      foreignKey: 'scopeId',
+    });
   }
 }
 
@@ -33,6 +39,9 @@ module.exports = (sequelize) => {
       },
       description: {
         type: DataTypes.STRING(500),
+      },
+      group: {
+        type: DataTypes.STRING,
       },
     },
     {
