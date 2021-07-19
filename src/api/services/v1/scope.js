@@ -7,7 +7,7 @@ const {
   createMeta,
 } = require('../../utils/utils');
 
-exports.upsert = async (id, { name, description } = {}, user) => {
+exports.upsert = async (id, { name, description, group } = {}, user) => {
   const isNew = !id;
 
   let res = isNew ? null : await dataAccess.getById(id);
@@ -21,6 +21,7 @@ exports.upsert = async (id, { name, description } = {}, user) => {
 
   res.name = name;
   res.description = description;
+  res.group = group;
 
   res = setUpdateMeta(res, user);
 

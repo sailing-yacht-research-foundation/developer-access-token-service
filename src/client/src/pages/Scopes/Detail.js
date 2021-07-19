@@ -26,6 +26,7 @@ const Detail = ({
   const [form, setForm] = useState({
     name: '',
     description: '',
+    group: '',
   });
 
   const formTextHandler = (evt) => {
@@ -37,10 +38,11 @@ const Detail = ({
 
   useEffect(() => {
     Promise.all([getById(id), getActions(id)])
-      .then(([{ name, description }]) => {
+      .then(([{ name, description, group }]) => {
         setForm({
           name,
           description,
+          group,
         });
       })
       .catch((err) => console.log(err));
@@ -86,6 +88,12 @@ const Detail = ({
           changed={formTextHandler}
           textarea={true}
           rows={3}
+        />
+        <TextBox
+          label="Group"
+          name="group"
+          value={form.group}
+          changed={formTextHandler}
         />
         <Button clicked={saveHandler}>Save</Button>
       </Card>

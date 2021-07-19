@@ -1,13 +1,14 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../utils/axios-helper';
 
-export const create = ({ name, description }) => {
+export const create = ({ name, description, group }) => {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       axios.api
         .post('/scopes', {
           name,
           description,
+          group,
         })
         .then((res) => {
           if (res.data) {
@@ -35,13 +36,14 @@ export const create = ({ name, description }) => {
   };
 };
 
-export const update = (id, { name, description }) => {
+export const update = (id, { name, description, group }) => {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       axios.api
         .put('/scopes/' + id, {
           name,
           description,
+          group,
         })
         .then((res) => {
           if (res.data) {
