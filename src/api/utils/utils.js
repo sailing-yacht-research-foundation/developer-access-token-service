@@ -5,12 +5,14 @@ const ControllerError = require('./ControllerError');
 const DataAccessError = require('./DataAccessError');
 const ServiceError = require('./ServiceError');
 const AuthError = require('./AuthError');
+const ValidationError = require('./ValidationError');
 
 exports.BaseError = BaseError;
 exports.ControllerError = ControllerError;
 exports.DataAccessError = DataAccessError;
 exports.ServiceError = ServiceError;
 exports.AuthError = AuthError;
+exports.ValidationError = ValidationError;
 
 exports.setCreateMeta = (data = {}, user) => {
   const now = Date.now();
