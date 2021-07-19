@@ -20,9 +20,23 @@ exports.getAll = async (paging = {}) => {
   const result = await db.Scope.findAllWithPaging(
     {
       where: {
-        name: {
-          [db.Op.iLike]: `%${paging.query}%`,
-        },
+        [Op.or]: [
+          {
+            name: {
+              [db.Op.iLike]: `%${paging.query}%`,
+            },
+          },
+          {
+            description: {
+              [db.Op.iLike]: `%${paging.query}%`,
+            },
+          },
+          {
+            group: {
+              [db.Op.iLike]: `%${paging.query}%`,
+            },
+          },
+        ],
       },
     },
     paging,
