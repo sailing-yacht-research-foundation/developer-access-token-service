@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
-import * as developerActions from '../../store/actions/developer';
+import * as developerActions from '../../store/actions/developers';
 import { useHistory, useParams } from 'react-router';
 import TextBox from '../../components/TextBox';
 

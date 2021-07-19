@@ -8,6 +8,8 @@ const initialState = {
     developer: false,
   },
   developers: {},
+  unassignedScopes: {},
+  assignedScopes: [],
   detail: {},
 };
 
