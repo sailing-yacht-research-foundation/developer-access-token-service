@@ -11,9 +11,10 @@ class Scope extends ModelBase {
     });
 
     this.belongsToMany(models.DeveloperToken, {
-      through: 'DeveloperTokenScope',
+      through: models.DeveloperTokenScope,
       as: 'tokenScopes',
       constraints: false,
+      foreignKey: 'scopeId',
     });
   }
 }

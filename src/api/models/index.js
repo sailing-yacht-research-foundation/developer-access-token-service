@@ -21,6 +21,7 @@ db.Scope = require('./entities/Scope')(sequelize);
 db.ScopeAction = require('./entities/ScopeAction')(sequelize);
 db.Developer = require('./entities/Developer')(sequelize);
 db.DeveloperToken = require('./entities/DeveloperToken')(sequelize);
+db.DeveloperTokenScope = require('./entities/DeveloperTokenScope')(sequelize);
 
 for (const key in db) {
   if (Object.hasOwnProperty.call(db, key)) {
