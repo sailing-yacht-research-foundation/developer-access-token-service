@@ -42,7 +42,7 @@ router.post(
   validation([
     body('name').notEmpty(),
     oneOf([body('developerId').exists(), param('developerId').exists()]),
-    body('scopeIds').exists().isArray(),
+    // body('scopeIds').exists().isArray(),
   ]),
   asyncHandler(async (req, res) => {
     let developerId = req.params.developerId || req.body.developerId;
