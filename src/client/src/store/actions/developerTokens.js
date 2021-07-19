@@ -1,13 +1,13 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../utils/axios-helper';
 
-export const create = ({ name, email }) => {
+export const create = ({ name, developerId }) => {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       axios.api
         .post('/developer-tokens', {
           name,
-          email,
+          developerId,
         })
         .then((res) => {
           if (res.data) {

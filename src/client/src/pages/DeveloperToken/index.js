@@ -32,7 +32,7 @@ const DeveloperTokens = ({
       <LinkButton
         size="sm"
         className="btn-sm flex-grow-0 leading-6"
-        to={'/tokens/new'}
+        to={'/developers/' + devId + '/tokens/new'}
       >
         <i className="fa fa-plus mr-2 my-auto "></i>Add New
       </LinkButton>
@@ -60,7 +60,10 @@ const DeveloperTokens = ({
       Cell: ({ value, row: { values: rowVal } }) => {
         return (
           <div className="flex flex-row w-full gap-x-2 place-content-center">
-            <LinkButton size="sm" to={'/tokens/' + value}>
+            <LinkButton
+              size="sm"
+              to={'/developers/' + devId + '/tokens/' + value}
+            >
               View
             </LinkButton>
             <Button

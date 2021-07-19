@@ -26,6 +26,10 @@ const DeveloperToken = asyncComponent(() => {
   return import('./pages/DeveloperToken');
 });
 
+const DeveloperTokenDetail = asyncComponent(() => {
+  return import('./pages/DeveloperToken/Detail');
+});
+
 const Actions = asyncComponent(() => {
   return import('./pages/Actions');
 });
@@ -70,6 +74,11 @@ const App = ({ validateToken: validateTokenProps, user, loading }) => {
         <Route path="/actions/:id" exact component={ActionDetail} />
         <Route path="/actions" exact component={Actions} />
         <Route path="/login" component={Login} />
+        <Route
+          path="/developers/:developerId/tokens/:id"
+          exact
+          component={DeveloperTokenDetail}
+        />
         <Route
           path="/developers/:developerId/tokens"
           exact
