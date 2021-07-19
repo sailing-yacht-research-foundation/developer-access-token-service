@@ -18,6 +18,9 @@ import asyncComponent from './hoc/asyncComponent';
 const Home = asyncComponent(() => {
   return import('./pages/Home');
 });
+const DeveloperDetail = asyncComponent(() => {
+  return import('./pages/Home/detail');
+});
 
 const Actions = asyncComponent(() => {
   return import('./pages/Actions');
@@ -65,6 +68,7 @@ const App = ({ validateToken: validateTokenProps, user, loading }) => {
         <Route path="/actions/:id" exact component={ActionDetail} />
         <Route path="/actions" exact component={Actions} />
         <Route path="/login" component={Login} />
+        <Route path="/developers/:id" exact component={DeveloperDetail} />
         <Route path="/" exact component={Home} />
       </Switch>
     );
