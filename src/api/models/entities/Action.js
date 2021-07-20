@@ -4,9 +4,15 @@ const ModelBase = require('../ModelBase');
 class Action extends ModelBase {
   static associate(models) {
     this.belongsToMany(models.Scope, {
-      through: 'ScopeActions',
+      through: models.ScopeAction,
+      as: 'scopes',
+      constraints: false,
+      foreignKey: 'actionId',
+    });
+    this.hasMany(models.ScopeAction, {
       as: 'scopeActions',
       constraints: false,
+      foreignKey: 'actionId',
     });
   }
 }

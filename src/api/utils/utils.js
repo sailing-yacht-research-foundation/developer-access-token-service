@@ -1,4 +1,4 @@
-// const db = require('../models');
+const db = require('../models');
 
 const BaseError = require('./BaseError');
 const ControllerError = require('./ControllerError');
@@ -23,6 +23,18 @@ exports.setCreateMeta = (data = {}, user) => {
 
 exports.setUpdateMeta = (data = {}, user) => {
   const now = Date.now();
+
+  data.updatedById = user.id;
+  data.updatedAt = now;
+
+  return data;
+};
+
+exports.createMeta = (user) => {
+  const now = Date.now();
+  let data = {};
+  data.createdById = user.id;
+  data.createdAt = now;
 
   data.updatedById = user.id;
   data.updatedAt = now;
@@ -112,15 +124,19 @@ exports.asyncHandler = (fn) =>
     return Promise.resolve(fnReturn).catch(next);
   };
 
-// exports.includeMeta = [
-//   {
-//     model: db.userProfile,
-//     as: 'createdBy',
-//     attributes: ['id', 'name'],
-//   },
-//   {
-//     model: db.userProfile,
-//     as: 'updatedBy',
-//     attributes: ['id', 'name'],
-//   },
-// ];
+exports.includeMeta = [
+  {
+    model: db.DevTokenAdmin,
+    as: 'createdBy',
+    attributes: ['id', 'name'],
+  },
+  {
+    model: db.DevTokenAdmin,
+    as: 'updatedBy',
+    attributes: ['id', 'name'],
+  },
+];
+
+exports.distinctArray = (data = []) => {
+  return [...new Set(data)];
+};

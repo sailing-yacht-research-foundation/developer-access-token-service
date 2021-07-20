@@ -3,17 +3,16 @@ const ModelBase = require('../ModelBase');
 
 class Scope extends ModelBase {
   static associate(models) {
-    this.belongsToMany(models.Action, {
-      through: models.ScopeAction,
-      as: 'actions',
+    this.belongsTo(models.Action, {
+      as: 'action',
       constraints: false,
-      foreignKey: 'scopeId',
+      foreignKey: 'actionId',
     });
 
-    this.belongsToMany(models.DeveloperToken, {
-      through: 'DeveloperTokenScope',
-      as: 'tokenScopes',
+    this.belongsTo(models.Scope, {
+      as: 'scope',
       constraints: false,
+      foreignKey: 'scopeId',
     });
   }
 }
@@ -27,15 +26,9 @@ module.exports = (sequelize) => {
         allowNull: false,
         primaryKey: true,
       },
-      name: {
-        type: DataTypes.STRING,
-      },
-      description: {
-        type: DataTypes.STRING(500),
-      },
     },
     {
-      modelName: 'Scope',
+      modelName: 'ScopeAction',
       sequelize,
     },
   );
