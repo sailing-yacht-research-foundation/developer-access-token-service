@@ -5,7 +5,7 @@ import Layout from '../../hoc/layout';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
 import * as developerTokenActions from '../../store/actions/developerTokens';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import TextBox from '../../components/TextBox';
 import Scopes from './Scopes';
 
