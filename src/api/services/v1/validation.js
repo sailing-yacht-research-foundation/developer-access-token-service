@@ -33,6 +33,7 @@ exports.validateToken = async (token) => {
 
   return {
     name: result.name,
+    developerId: result.developerId,
     createdAt: result.createdAt,
     scopes: scopes,
     actions: Array.from(actions.values()),

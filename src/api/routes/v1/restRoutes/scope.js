@@ -1,5 +1,7 @@
 const router = require('express').Router();
+const { body } = require('express-validator');
 const pagination = require('../../../middlewares/pagination');
+const validation = require('../../../middlewares/validation');
 
 const services = require('../../../services/v1/scope');
 const { asyncHandler } = require('../../../utils/utils');
@@ -52,6 +54,7 @@ router.get(
 
 router.post(
   '/',
+  validation([body('name').notEmpty()]),
   asyncHandler(async (req, res) => {
     let result = await services.upsert(null, req.body, req.user);
     res.send(result);
@@ -60,6 +63,7 @@ router.post(
 
 router.put(
   '/:id',
+  validation([body('name').notEmpty()]),
   asyncHandler(async (req, res) => {
     let result = await services.upsert(req.params.id, req.body, req.user);
     res.send(result);
