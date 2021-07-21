@@ -9,6 +9,8 @@ const initialState = {
   },
   developerTokens: {},
   detail: {},
+  scopes: [],
+  unassignedScopes: {},
 };
 
 const upsert = (state, developerToken) => {
@@ -20,7 +22,7 @@ const upsert = (state, developerToken) => {
 const upsertSuccess = (state, developerToken) => {
   return produce(state, (draft) => {
     draft.loading.developerToken = false;
-    draft.detail = {};
+    draft.detail = developerToken.detail;
   });
 };
 
@@ -93,6 +95,65 @@ const deleteDeveloperTokenFail = (state, developerToken) => {
   });
 };
 
+const getUnassignedScopesList = (state, scope) => {
+  return produce(state, (draft) => {
+    draft.loading.unassignedScopes = true;
+  });
+};
+
+const getUnassignedScopesListSuccess = (state, scope) => {
+  return produce(state, (draft) => {
+    draft.loading.unassignedScopes = false;
+    draft.unassignedScopes = scope.unassignedScopes;
+  });
+};
+
+const getUnassignedScopesListFail = (state, scope) => {
+  return produce(state, (draft) => {
+    draft.loading.unassignedScopes = false;
+    draft.unassignedScopes = {};
+  });
+};
+
+const removeScope = (state, action) => {
+  return produce(state, (draft) => {
+    if (action.scope.isNew) {
+      draft.scopes = draft.scopes.filter((t) => t.id !== action.scope.id);
+    } else {
+      const index = draft.scopes.findIndex((t) => t.id === action.scope.id);
+      draft.scopes[index].deleted = !draft.scopes[index].deleted;
+    }
+  });
+};
+
+const addScope = (state, action) => {
+  return produce(state, (draft) => {
+    draft.scopes.push({ ...action.scope, isNew: true });
+  });
+};
+
+const getScopeList = (state, scope) => {
+  return produce(state, (draft) => {
+    draft.loading.scopes = true;
+  });
+};
+
+const getScopeListSuccess = (state, scope) => {
+  return produce(state, (draft) => {
+    draft.loading.scopes = false;
+    draft.scopes = scope.scopes;
+
+    draft.scopes.sort((a, b) => (a.service > b.service ? 1 : -1));
+  });
+};
+
+const getScopeListFail = (state, scope) => {
+  return produce(state, (draft) => {
+    draft.loading.scopes = false;
+    draft.scopes = [];
+  });
+};
+
 const reducer = (state = initialState, developerToken) => {
   switch (developerToken.type) {
     case actionTypes.CREATE_DEVELOPER_TOKEN:
@@ -130,6 +191,24 @@ const reducer = (state = initialState, developerToken) => {
     case actionTypes.DELETE_DEVELOPER_TOKEN_FAILED:
       return deleteDeveloperTokenFail(state, developerToken);
 
+    case actionTypes.ADD_SCOPES_TO_DEVELOPER_TOKEN:
+      return addScope(state, developerToken);
+    case actionTypes.REMOVE_SCOPES_FROM_DEVELOPER_TOKEN:
+      return removeScope(state, developerToken);
+
+    case actionTypes.GET_DEVELOPER_TOKEN_SCOPES_LIST:
+      return getScopeList(state, developerToken);
+    case actionTypes.GET_DEVELOPER_TOKEN_SCOPES_LIST_SUCCESS:
+      return getScopeListSuccess(state, developerToken);
+    case actionTypes.GET_DEVELOPER_TOKEN_SCOPES_LIST_FAILED:
+      return getScopeListFail(state, developerToken);
+
+    case actionTypes.GET_DEVELOPER_TOKEN_UNASSIGNED_SCOPES_LIST:
+      return getUnassignedScopesList(state, developerToken);
+    case actionTypes.GET_DEVELOPER_TOKEN_UNASSIGNED_SCOPES_LIST_SUCCESS:
+      return getUnassignedScopesListSuccess(state, developerToken);
+    case actionTypes.GET_DEVELOPER_TOKEN_UNASSIGNED_SCOPES_LIST_FAILED:
+      return getUnassignedScopesListFail(state, developerToken);
     default:
       return state;
   }
