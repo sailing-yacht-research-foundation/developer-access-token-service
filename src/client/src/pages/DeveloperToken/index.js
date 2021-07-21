@@ -143,7 +143,6 @@ const DeveloperTokens = ({
           <li>
             DeveloperToken : <strong>{confirmState?.current?.name}</strong>
           </li>
-          <li>Email : {confirmState?.current?.email}</li>
         </ol>
         <div className="flex flex-row items-start gap-x-2 mt-4">
           <Button
