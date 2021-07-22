@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const formatNumber = (x, separator) => {
   if (x) return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator || ',');
   else return x;
@@ -119,22 +117,6 @@ export const toPascalCase = (s) => {
         return g1.toUpperCase() + g2.toLowerCase();
       })
     : s;
-};
-
-export const compareArrayOfString = (array1, array2) => {
-  if (!(Array.isArray(array1) && Array.isArray(array2))) return false;
-
-  if (array1.length != array2.length) return false;
-
-  array1.sort();
-  array2.sort();
-
-  for (let index = 0; index < array1.length; index++) {
-    const element = array1[index];
-    if (element != array2[index]) return false;
-  }
-
-  return true;
 };
 
 export const convertRemToPixels = (rem) => {

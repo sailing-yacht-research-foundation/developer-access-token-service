@@ -25,9 +25,6 @@ const Layout = ({ children, title, user = {}, logout, onClick }) => {
     logout();
     history.push('/login');
   };
-  const profilePict = user.profilePict
-    ? user.profilePict
-    : 'http://via.placeholder.com/150';
   return (
     <div
       className="bg-gray-100"
@@ -93,14 +90,14 @@ const Layout = ({ children, title, user = {}, logout, onClick }) => {
                       aria-orientation="vertical"
                       aria-labelledby="user-menu"
                     >
-                      <a
+                      <div
                         href="#"
                         onClick={onSignout}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                         role="menuitem"
                       >
                         Sign out
-                      </a>
+                      </div>
                     </div>
                   ) : null}
                 </div>
@@ -205,13 +202,12 @@ const Layout = ({ children, title, user = {}, logout, onClick }) => {
             </div>
             {showProfile ? (
               <div className="mt-3 px-2 space-y-1">
-                <a
-                  href="#"
+                <div
                   onClick={onSignout}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 cursor-pointer"
                 >
                   Sign out
-                </a>
+                </div>
               </div>
             ) : null}
           </div>
