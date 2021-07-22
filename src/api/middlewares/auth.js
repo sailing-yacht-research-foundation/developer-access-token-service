@@ -5,7 +5,7 @@ module.exports =
   async (req, res, next) => {
     const authHeader = req.get('Authorization');
     if (!authHeader) {
-      const error = new AuthError('Token Not Found', statusCodes.BAD_REQUEST);
+      const error = new AuthError('Token Not Found');
       next(error);
       return;
     }
@@ -13,7 +13,7 @@ module.exports =
     const split = authHeader.split(' ');
 
     if (split.length < 2) {
-      const error = new AuthError('Token Not Found', statusCodes.BAD_REQUEST);
+      const error = new AuthError('Token Not Found');
       next(error);
       return;
     }
