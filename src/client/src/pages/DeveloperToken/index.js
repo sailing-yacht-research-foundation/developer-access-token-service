@@ -9,6 +9,7 @@ import * as developerActions from '../../store/actions/developers';
 import { formatString } from '../../utils/dateUtil';
 import LinkButton from '../../components/LinkButton';
 import Modal from '../../components/Modal/Modal';
+import * as utilActions from '../../store/actions/utils';
 
 const sortByItems = [
   { label: 'Newest', sort: 'createdAt', srdir: -1 },
@@ -24,6 +25,7 @@ const DeveloperTokens = ({
   developerTokens,
   getDevById,
   developersDetail,
+  showSnackbar,
 }) => {
   const params = useParams();
   const devId = params.developerId;
@@ -38,10 +40,10 @@ const DeveloperTokens = ({
       </LinkButton>
     </>
   );
-  const doDeleteDeveloperTokens = (id) => {
-    deleteDeveloperToken(id).then((res) => {
+  const doDeleteDeveloperTokens = (data) => {
+    deleteDeveloperToken(data.id).then((res) => {
       onConfirmClosed();
-      // this.props.showSnackBar("Delete Success", { success: true })
+      showSnackbar(`${data.name} Deleted`, { success: true });
     });
   };
   const onConfirmDelete = (developerTokenId) => {
@@ -148,7 +150,7 @@ const DeveloperTokens = ({
           <Button
             size="md"
             className="ml-auto"
-            clicked={() => doDeleteDeveloperTokens(confirmState?.current?.id)}
+            clicked={() => doDeleteDeveloperTokens(confirmState?.current)}
           >
             Delete
           </Button>
@@ -182,6 +184,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(developerTokenActions.getList(id, dtRequest)),
     deleteDeveloperToken: (id) =>
       dispatch(developerTokenActions.deleteDeveloperToken(id)),
+    showSnackbar: (message, opt) =>
+      dispatch(utilActions.showSnackbar(message, opt)),
   };
 };
 

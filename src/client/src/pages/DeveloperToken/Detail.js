@@ -8,6 +8,7 @@ import * as developerTokenActions from '../../store/actions/developerTokens';
 import { useParams } from 'react-router';
 import TextBox from '../../components/TextBox';
 import Scopes from './Scopes';
+import * as utilActions from '../../store/actions/utils';
 
 const Detail = ({
   loading,
@@ -18,6 +19,7 @@ const Detail = ({
   getScopes,
   addScope,
   removeScope,
+  showSnackbar,
 }) => {
   const { id: urlId, developerId } = useParams();
   const [form, setForm] = useState({
@@ -46,6 +48,7 @@ const Detail = ({
 
   const saveHandler = async () => {
     await create({ ...form, developerId, scopeIds: scopes.map((t) => t.id) });
+    showSnackbar('new token created', { success: true });
   };
 
   const onTokenClicked = (evt) => {
@@ -169,6 +172,8 @@ const mapDispatchToProps = (dispatch) => {
     getScopes: (id) => dispatch(developerTokenActions.getScopes(id)),
     addScope: (scope) => dispatch(developerTokenActions.addScope(scope)),
     removeScope: (scope) => dispatch(developerTokenActions.removeScope(scope)),
+    showSnackbar: (message, opt) =>
+      dispatch(utilActions.showSnackbar(message, opt)),
   };
 };
 

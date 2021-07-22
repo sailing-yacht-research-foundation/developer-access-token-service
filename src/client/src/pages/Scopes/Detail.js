@@ -7,6 +7,7 @@ import * as scopeActions from '../../store/actions/scopes';
 import { useHistory, useParams } from 'react-router';
 import TextBox from '../../components/TextBox';
 import UnassignedActionsTable from './unassignedActionsTable';
+import * as utilActions from '../../store/actions/utils';
 
 const Detail = ({
   loading,
@@ -20,6 +21,7 @@ const Detail = ({
   removeAction,
   updateActions,
   getUnassignedActions,
+  showSnackbar,
 }) => {
   const { id } = useParams();
   const history = useHistory();
@@ -54,8 +56,10 @@ const Detail = ({
     if (isNew) {
       const result = await create(form);
       history.push('/scopes/' + result.id);
+      showSnackbar(form.name + ' created', { success: true });
     } else {
       await update(id, form);
+      showSnackbar(form.name + ' updated', { success: true });
     }
   };
 
@@ -64,6 +68,7 @@ const Detail = ({
       id,
       actions.filter((t) => !t.deleted).map((t) => t.id),
     );
+    showSnackbar('Actions updated', { success: true });
     await Promise.all([getUnassignedActions(id, {}), getActions(id)]);
   };
 
@@ -171,6 +176,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(scopeActions.updateActions(id, actions)),
     getUnassignedActions: (id, paging) =>
       dispatch(scopeActions.getUnassignedActions(id, paging)),
+    showSnackbar: (message, opt) =>
+      dispatch(utilActions.showSnackbar(message, opt)),
   };
 };
 

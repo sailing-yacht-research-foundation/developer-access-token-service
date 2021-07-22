@@ -154,3 +154,8 @@ export const IsJsonString = (str) => {
   }
   return true;
 };
+
+let lastSnackId = 0;
+export const snackId = () => {
+  return `snack${lastSnackId++}`;
+};
