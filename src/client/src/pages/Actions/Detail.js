@@ -5,9 +5,10 @@ import Card from '../../components/Card';
 import Button from '../../components/Button';
 import * as actionsActions from '../../store/actions/actions';
 import { useHistory, useParams } from 'react-router';
+import * as utilActions from '../../store/actions/utils';
 import TextBox from '../../components/TextBox';
 
-const Detail = ({ loading, detail, getById, update, create }) => {
+const Detail = ({ loading, detail, getById, update, create, showSnackbar }) => {
   const { id } = useParams();
 
   const [form, setForm] = useState({
@@ -40,8 +41,10 @@ const Detail = ({ loading, detail, getById, update, create }) => {
   const saveHandler = async () => {
     if (isNew) {
       await create(form);
+      showSnackbar(form.name + ' created', { success: true });
     } else {
       await update(id, form);
+      showSnackbar(form.name + ' updated', { success: true });
     }
     history.push('/actions');
   };
@@ -84,6 +87,8 @@ const mapDispatchToProps = (dispatch) => {
     deleteAction: (id) => dispatch(actionsActions.deleteAction({ id })),
     update: (id, data) => dispatch(actionsActions.update(id, data)),
     create: (data) => dispatch(actionsActions.create(data)),
+    showSnackbar: (message, opt) =>
+      dispatch(utilActions.showSnackbar(message, opt)),
   };
 };
 
