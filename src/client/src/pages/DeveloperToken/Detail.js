@@ -107,10 +107,12 @@ const Detail = ({
               return (
                 <Card key={t.id} className="p-2 pr-4 flex flex-row">
                   <div className="flex flex-col gap-x-2 flex-grow  text-sm">
-                    {t.isNew ? (
-                      <span className="text-xs text-indigo-500">new</span>
-                    ) : t.deleted ? (
-                      <span className="text-xs text-red-500">removed</span>
+                    {isNew ? (
+                      t.isNew ? (
+                        <span className="text-xs text-indigo-500">new</span>
+                      ) : t.deleted ? (
+                        <span className="text-xs text-red-500">removed</span>
+                      ) : null
                     ) : null}
                     <h6>{t.name}</h6>
                     <div className="text-gray-500 italic text-xs">
