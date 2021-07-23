@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  dev-token-service:
+    image: dev-token-service
+    restart: always
+    build:
+      context: ./
+      args:
+        - REACT_APP_STORAGE_API_BASE=${REACT_APP_STORAGE_API_BASE}
+        - REACT_APP_STORAGE_AUTH_KEY=${REACT_APP_STORAGE_AUTH_KEY}
+        - INLINE_RUNTIME_CHUNK=${INLINE_RUNTIME_CHUNK}
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - PORT=${PORT}
+      - JWT_SECRET=${JWT_SECRET}
+      - TOKEN_EXPIRE=${TOKEN_EXPIRE}
+      - REACT_APP_STORAGE_API_BASE=${REACT_APP_STORAGE_API_BASE}
+      - REACT_APP_STORAGE_AUTH_KEY=${REACT_APP_STORAGE_AUTH_KEY}
+      - INLINE_RUNTIME_CHUNK=${INLINE_RUNTIME_CHUNK}
+    ports:
+      - ${SERVER_PORT_MAP}:${PORT}
