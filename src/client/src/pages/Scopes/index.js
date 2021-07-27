@@ -7,6 +7,7 @@ import * as scopeActions from '../../store/actions/scopes';
 import { formatString } from '../../utils/dateUtil';
 import LinkButton from '../../components/LinkButton';
 import Modal from '../../components/Modal/Modal';
+import * as utilActions from '../../store/actions/utils';
 
 const sortByItems = [
   { label: 'Newest', sort: 'createdAt', srdir: -1 },
@@ -15,7 +16,7 @@ const sortByItems = [
   { label: 'Name Desc', sort: 'name', srdir: -1 },
 ];
 
-const Scopes = ({ loading, getList, deleteScope, scopes, userData }) => {
+const Scopes = ({ loading, getList, deleteScope, scopes, showSnackbar }) => {
   const tool = (
     <>
       <LinkButton
@@ -27,12 +28,14 @@ const Scopes = ({ loading, getList, deleteScope, scopes, userData }) => {
       </LinkButton>
     </>
   );
-  const doDeleteScopes = (id) => {
-    deleteScope(id).then((res) => {
+
+  const doDeleteScopes = (data) => {
+    deleteScope(data.id).then((res) => {
       onConfirmClosed();
-      // this.props.showSnackBar("Delete Success", { success: true })
+      showSnackbar(`${data.name} Deleted`, { success: true });
     });
   };
+
   const onConfirmDelete = (scopeId) => {
     setConfirmState({
       show: true,
@@ -145,7 +148,7 @@ const Scopes = ({ loading, getList, deleteScope, scopes, userData }) => {
           <Button
             size="md"
             className="ml-auto"
-            clicked={() => doDeleteScopes(confirmState?.current?.id)}
+            clicked={() => doDeleteScopes(confirmState?.current)}
           >
             Delete
           </Button>
@@ -175,6 +178,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getList: (dtRequest) => dispatch(scopeActions.getList(dtRequest)),
     deleteScope: (id) => dispatch(scopeActions.deleteScope(id)),
+    showSnackbar: (message, opt) =>
+      dispatch(utilActions.showSnackbar(message, opt)),
   };
 };
 

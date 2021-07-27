@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Button from '../../components/Button';
 import Table from '../../components/Table/Table';
 import * as actionActions from '../../store/actions/actions';
+import * as utilActions from '../../store/actions/utils';
 import { formatString } from '../../utils/dateUtil';
 import LinkButton from '../../components/LinkButton';
 import Modal from '../../components/Modal/Modal';
@@ -17,7 +18,7 @@ const sortByItems = [
   { label: 'Name Desc', sort: 'name', srdir: -1 },
 ];
 
-const Actions = ({ loading, getList, deleteAction, actions, userData }) => {
+const Actions = ({ loading, getList, deleteAction, actions, showSnackbar }) => {
   const tool = (
     <>
       <LinkButton
@@ -29,10 +30,10 @@ const Actions = ({ loading, getList, deleteAction, actions, userData }) => {
       </LinkButton>
     </>
   );
-  const doDeleteActions = (id) => {
-    deleteAction(id).then((res) => {
+  const doDeleteActions = (data) => {
+    deleteAction(data.id).then((res) => {
       onConfirmClosed();
-      // this.props.showSnackBar("Delete Success", { success: true })
+      showSnackbar(`${data.name} Deleted`, { success: true });
     });
   };
   const onConfirmDelete = (actionId) => {
@@ -139,7 +140,7 @@ const Actions = ({ loading, getList, deleteAction, actions, userData }) => {
           <Button
             size="md"
             className="ml-auto"
-            clicked={() => doDeleteActions(confirmState?.current?.id)}
+            clicked={() => doDeleteActions(confirmState?.current)}
           >
             Delete
           </Button>
@@ -169,6 +170,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getList: (dtRequest) => dispatch(actionActions.getList(dtRequest)),
     deleteAction: (id) => dispatch(actionActions.deleteAction(id)),
+    showSnackbar: (message, opt) =>
+      dispatch(utilActions.showSnackbar(message, opt)),
   };
 };
 

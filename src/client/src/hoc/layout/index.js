@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
+import Snackbar from '../../components/Snackbar/Snackbar';
 import * as authactions from '../../store/actions/auth';
 
 const Layout = ({ children, title, user = {}, logout, onClick }) => {
@@ -225,6 +226,7 @@ const Layout = ({ children, title, user = {}, logout, onClick }) => {
       <main>
         <div className="mx-auto py-6 sm:px-6 lg:px-8">{children}</div>
       </main>
+      <Snackbar></Snackbar>
     </div>
   );
 };

@@ -6,8 +6,9 @@ import Button from '../../components/Button';
 import * as developerActions from '../../store/actions/developers';
 import { useHistory, useParams } from 'react-router';
 import TextBox from '../../components/TextBox';
+import * as utilActions from '../../store/actions/utils';
 
-const Detail = ({ loading, detail, getById, update, create }) => {
+const Detail = ({ loading, detail, getById, update, create, showSnackbar }) => {
   const { id } = useParams();
   const history = useHistory();
   const [form, setForm] = useState({
@@ -38,8 +39,10 @@ const Detail = ({ loading, detail, getById, update, create }) => {
   const saveHandler = async () => {
     if (isNew) {
       await create(form);
+      showSnackbar('new developer profile saved', { success: true });
     } else {
       await update(id, form);
+      showSnackbar('developer profile updated', { success: true });
     }
     history.push('/');
   };
@@ -89,6 +92,8 @@ const mapDispatchToProps = (dispatch) => {
     deleteDeveloper: (id) => dispatch(developerActions.deleteDeveloper({ id })),
     update: (id, data) => dispatch(developerActions.update(id, data)),
     create: (data) => dispatch(developerActions.create(data)),
+    showSnackbar: (message, opt) =>
+      dispatch(utilActions.showSnackbar(message, opt)),
   };
 };
 

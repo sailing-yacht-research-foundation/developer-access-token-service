@@ -7,6 +7,7 @@ import * as developerActions from '../../store/actions/developers';
 import { formatString } from '../../utils/dateUtil';
 import LinkButton from '../../components/LinkButton';
 import Modal from '../../components/Modal/Modal';
+import * as utilActions from '../../store/actions/utils';
 
 const sortByItems = [
   { label: 'Newest', sort: 'createdAt', srdir: -1 },
@@ -15,7 +16,13 @@ const sortByItems = [
   { label: 'Name Desc', sort: 'name', srdir: -1 },
 ];
 
-const Developers = ({ loading, getList, deleteDeveloper, developers }) => {
+const Developers = ({
+  loading,
+  getList,
+  deleteDeveloper,
+  developers,
+  showSnackbar,
+}) => {
   const tool = (
     <>
       <LinkButton
@@ -27,10 +34,10 @@ const Developers = ({ loading, getList, deleteDeveloper, developers }) => {
       </LinkButton>
     </>
   );
-  const doDeleteDevelopers = (id) => {
-    deleteDeveloper(id).then((res) => {
+  const doDeleteDevelopers = (data) => {
+    deleteDeveloper(data.id).then((res) => {
       onConfirmClosed();
-      // this.props.showSnackBar("Delete Success", { success: true })
+      showSnackbar(`${data.name} Deleted`, { success: true });
     });
   };
   const onConfirmDelete = (developerId) => {
@@ -140,7 +147,7 @@ const Developers = ({ loading, getList, deleteDeveloper, developers }) => {
           <Button
             size="md"
             className="ml-auto"
-            clicked={() => doDeleteDevelopers(confirmState?.current?.id)}
+            clicked={() => doDeleteDevelopers(confirmState?.current)}
           >
             Delete
           </Button>
@@ -170,6 +177,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getList: (dtRequest) => dispatch(developerActions.getList(dtRequest)),
     deleteDeveloper: (id) => dispatch(developerActions.deleteDeveloper(id)),
+    showSnackbar: (message, opt) =>
+      dispatch(utilActions.showSnackbar(message, opt)),
   };
 };
 
