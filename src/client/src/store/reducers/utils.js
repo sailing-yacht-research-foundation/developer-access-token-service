@@ -23,7 +23,7 @@ const showSnackbar = (state, action) => {
 };
 
 const hideSnackbar = (state, action) => {
-  if (state.snackbar.id == action.id) {
+  if (state.snackbar.id === action.id) {
     return produce(state, (draft) => {
       draft.snackbar.show = false;
     });
