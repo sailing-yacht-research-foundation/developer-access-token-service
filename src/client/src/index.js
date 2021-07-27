@@ -14,6 +14,7 @@ import actionsReducer from './store/reducers/actions';
 import scopesReducer from './store/reducers/scopes';
 import developerReducer from './store/reducers/developers';
 import developerTokenReducer from './store/reducers/developerTokens';
+import utilsReducer from './store/reducers/utils';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   scopes: scopesReducer,
   developers: developerReducer,
   developerTokens: developerTokenReducer,
+  utils: utilsReducer,
 });
 
 const store = createStore(
