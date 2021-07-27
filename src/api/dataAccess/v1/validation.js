@@ -5,7 +5,7 @@ const { includeMeta } = require('../../utils/utils');
 
 exports.getTokenById = async (id) => {
   const result = await db.DeveloperToken.findByPk(id, {
-    attributes: ['name', 'createdAt'],
+    attributes: ['name', 'createdAt', 'developerId'],
     include: [
       {
         model: db.Scope,

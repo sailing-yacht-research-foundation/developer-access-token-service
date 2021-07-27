@@ -66,11 +66,18 @@ exports.delete = async (id) => {
   });
 
   if (data) {
-    await db.DeveloperToken.destroy({
-      where: {
-        id: id,
-      },
-    });
+    await Promise.all([
+      db.DeveloperToken.destroy({
+        where: {
+          id: id,
+        },
+      }),
+      db.DeveloperTokenScope.destroy({
+        where: {
+          developerTokenId: id,
+        },
+      }),
+    ]);
   }
 
   return data?.toJSON();
