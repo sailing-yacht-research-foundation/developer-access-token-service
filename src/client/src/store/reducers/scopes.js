@@ -25,7 +25,7 @@ const upsert = (state, scope) => {
 const upsertSuccess = (state, scope) => {
   return produce(state, (draft) => {
     draft.loading.scope = false;
-    draft.detail = {};
+    draft.detail = scope.detail;
   });
 };
 

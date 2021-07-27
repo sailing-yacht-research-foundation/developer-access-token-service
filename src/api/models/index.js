@@ -9,7 +9,7 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'postgres',
-    logging: false,
+    logging: console.log,
   },
 );
 
@@ -21,6 +21,7 @@ db.Scope = require('./entities/Scope')(sequelize);
 db.ScopeAction = require('./entities/ScopeAction')(sequelize);
 db.Developer = require('./entities/Developer')(sequelize);
 db.DeveloperToken = require('./entities/DeveloperToken')(sequelize);
+db.DeveloperTokenScope = require('./entities/DeveloperTokenScope')(sequelize);
 
 for (const key in db) {
   if (Object.hasOwnProperty.call(db, key)) {

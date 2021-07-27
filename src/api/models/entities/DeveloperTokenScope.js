@@ -1,16 +1,16 @@
 const { DataTypes } = require('sequelize');
 const ModelBase = require('../ModelBase');
 
-class ScopeAction extends ModelBase {
+class DeveloperTokenScope extends ModelBase {
   static associate(models) {
-    this.belongsTo(models.Action, {
-      as: 'action',
+    this.belongsTo(models.DeveloperToken, {
+      as: 'developerTokenScopes',
       constraints: false,
-      foreignKey: 'actionId',
+      foreignKey: 'developerTokenId',
     });
 
     this.belongsTo(models.Scope, {
-      as: 'scope',
+      as: 'tokenScopes',
       constraints: false,
       foreignKey: 'scopeId',
     });
@@ -18,7 +18,7 @@ class ScopeAction extends ModelBase {
 }
 
 module.exports = (sequelize) => {
-  ScopeAction.init(
+  DeveloperTokenScope.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -28,9 +28,9 @@ module.exports = (sequelize) => {
       },
     },
     {
-      modelName: 'ScopeAction',
+      modelName: 'DeveloperTokenScope',
       sequelize,
     },
   );
-  return ScopeAction;
+  return DeveloperTokenScope;
 };

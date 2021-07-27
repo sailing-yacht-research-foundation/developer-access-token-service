@@ -4,9 +4,10 @@ const ModelBase = require('../ModelBase');
 class DeveloperToken extends ModelBase {
   static associate(models) {
     this.belongsToMany(models.Scope, {
-      through: 'DeveloperTokenScope',
-      as: 'tokenScopes',
+      through: models.DeveloperTokenScope,
+      as: 'developerTokenScopes',
       constraints: false,
+      foreignKey: 'developerTokenId',
     });
 
     this.belongsTo(models.Developer, {

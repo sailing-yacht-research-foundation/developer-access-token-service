@@ -22,10 +22,11 @@ const Detail = ({
   getUnassignedActions,
 }) => {
   const { id } = useParams();
-
+  const history = useHistory();
   const [form, setForm] = useState({
     name: '',
     description: '',
+    group: '',
   });
 
   const formTextHandler = (evt) => {
@@ -37,10 +38,11 @@ const Detail = ({
 
   useEffect(() => {
     Promise.all([getById(id), getActions(id)])
-      .then(([{ name, description }]) => {
+      .then(([{ name, description, group }]) => {
         setForm({
           name,
           description,
+          group,
         });
       })
       .catch((err) => console.log(err));
@@ -50,7 +52,8 @@ const Detail = ({
 
   const saveHandler = async () => {
     if (isNew) {
-      await create(form);
+      const result = await create(form);
+      history.push('/scopes/' + result.id);
     } else {
       await update(id, form);
     }
@@ -85,6 +88,12 @@ const Detail = ({
           changed={formTextHandler}
           textarea={true}
           rows={3}
+        />
+        <TextBox
+          label="Group"
+          name="group"
+          value={form.group}
+          changed={formTextHandler}
         />
         <Button clicked={saveHandler}>Save</Button>
       </Card>
@@ -124,7 +133,9 @@ const Detail = ({
               );
             })}
           </div>
-          <Button clicked={saveActions}>Save</Button>
+          <Button clicked={saveActions} disabled={isNew}>
+            Save
+          </Button>
         </Card>
         <Card className="flex flex-col p-8 gap-y-4">
           <h2 className="font-semibold">Unassigned Actions</h2>

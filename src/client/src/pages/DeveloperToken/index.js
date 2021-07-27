@@ -1,8 +1,10 @@
 import Layout from '../../hoc/layout';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import Button from '../../components/Button';
 import Table from '../../components/Table/Table';
+import * as developerTokenActions from '../../store/actions/developerTokens';
 import * as developerActions from '../../store/actions/developers';
 import { formatString } from '../../utils/dateUtil';
 import LinkButton from '../../components/LinkButton';
@@ -15,45 +17,54 @@ const sortByItems = [
   { label: 'Name Desc', sort: 'name', srdir: -1 },
 ];
 
-const Developers = ({ loading, getList, deleteDeveloper, developers }) => {
+const DeveloperTokens = ({
+  loading,
+  getList,
+  deleteDeveloperToken,
+  developerTokens,
+  getDevById,
+  developersDetail,
+}) => {
+  const params = useParams();
+  const devId = params.developerId;
   const tool = (
     <>
       <LinkButton
         size="sm"
         className="btn-sm flex-grow-0 leading-6"
-        to={'/developers/new'}
+        to={'/developers/' + devId + '/tokens/new'}
       >
         <i className="fa fa-plus mr-2 my-auto "></i>Add New
       </LinkButton>
     </>
   );
-  const doDeleteDevelopers = (id) => {
-    deleteDeveloper(id).then((res) => {
+  const doDeleteDeveloperTokens = (id) => {
+    deleteDeveloperToken(id).then((res) => {
       onConfirmClosed();
       // this.props.showSnackBar("Delete Success", { success: true })
     });
   };
-  const onConfirmDelete = (developerId) => {
+  const onConfirmDelete = (developerTokenId) => {
     setConfirmState({
       show: true,
-      current: developers.rows.find((t) => t.id === developerId),
+      current: developerTokens.rows.find((t) => t.id === developerTokenId),
     });
   };
 
   const columns = [
     {
-      Header: 'Developers',
+      Header: 'Developer Tokens',
       accessor: 'id',
       default: '-',
-      className: 'og-table-developer ',
+      className: 'og-table-developerToken ',
       Cell: ({ value, row: { values: rowVal } }) => {
         return (
           <div className="flex flex-row w-full gap-x-2 place-content-center">
-            <LinkButton size="sm" to={'/developers/' + value}>
-              Edit
-            </LinkButton>
-            <LinkButton size="sm" to={'/developers/' + value + '/tokens'}>
-              Tokens
+            <LinkButton
+              size="sm"
+              to={'/developers/' + devId + '/tokens/' + value}
+            >
+              View
             </LinkButton>
             <Button
               size="sm"
@@ -69,14 +80,6 @@ const Developers = ({ loading, getList, deleteDeveloper, developers }) => {
     {
       Header: 'Name',
       accessor: 'name',
-      className: 'text-center',
-      headerStyle: {
-        width: '10rem',
-      },
-    },
-    {
-      Header: 'Email',
-      accessor: 'email',
       className: 'text-center',
       headerStyle: {
         width: '10rem',
@@ -100,7 +103,11 @@ const Developers = ({ loading, getList, deleteDeveloper, developers }) => {
     },
   ];
 
-  const developeritems = (developers || {}).rows || [];
+  const developerTokenitems = (developerTokens || {}).rows || [];
+
+  useEffect(() => {
+    getDevById(devId);
+  }, [devId]);
 
   const [confirmState, setConfirmState] = useState({
     show: false,
@@ -113,16 +120,18 @@ const Developers = ({ loading, getList, deleteDeveloper, developers }) => {
       current: null,
     });
   };
-
+  const getPage = (paging) => {
+    return getList(devId, paging);
+  };
   return (
-    <Layout title="Developers">
+    <Layout title={`${developersDetail.name}'s Tokens`}>
       <Table
         columns={columns}
         loading={loading}
-        fetchData={getList}
-        data={developeritems}
-        count={developers.count}
-        pageCount={developers.pageCount}
+        fetchData={getPage}
+        data={developerTokenitems}
+        count={developerTokens.count}
+        pageCount={developerTokens.pageCount}
         exportCsv={false}
         tools={tool}
         sortByItems={sortByItems}
@@ -132,7 +141,7 @@ const Developers = ({ loading, getList, deleteDeveloper, developers }) => {
         <p className="text-center">Are you sure deleting :</p>
         <ol>
           <li>
-            Developer : <strong>{confirmState?.current?.name}</strong>
+            DeveloperToken : <strong>{confirmState?.current?.name}</strong>
           </li>
           <li>Email : {confirmState?.current?.email}</li>
         </ol>
@@ -140,7 +149,7 @@ const Developers = ({ loading, getList, deleteDeveloper, developers }) => {
           <Button
             size="md"
             className="ml-auto"
-            clicked={() => doDeleteDevelopers(confirmState?.current?.id)}
+            clicked={() => doDeleteDeveloperTokens(confirmState?.current?.id)}
           >
             Delete
           </Button>
@@ -160,17 +169,21 @@ const Developers = ({ loading, getList, deleteDeveloper, developers }) => {
 
 const mapStateToProps = (state) => {
   return {
-    developers: state.developers.developers,
-    loading: state.developers.loading.developers,
+    developerTokens: state.developerTokens.developerTokens,
+    developersDetail: state.developers.detail,
+    loading: state.developerTokens.loading.developerTokens,
     userData: state.auth.user,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getList: (dtRequest) => dispatch(developerActions.getList(dtRequest)),
-    deleteDeveloper: (id) => dispatch(developerActions.deleteDeveloper(id)),
+    getDevById: (id) => dispatch(developerActions.getById({ id })),
+    getList: (id, dtRequest) =>
+      dispatch(developerTokenActions.getList(id, dtRequest)),
+    deleteDeveloperToken: (id) =>
+      dispatch(developerTokenActions.deleteDeveloperToken(id)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Developers);
+export default connect(mapStateToProps, mapDispatchToProps)(DeveloperTokens);

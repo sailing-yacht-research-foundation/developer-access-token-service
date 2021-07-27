@@ -11,9 +11,16 @@ class Scope extends ModelBase {
     });
 
     this.belongsToMany(models.DeveloperToken, {
-      through: 'DeveloperTokenScope',
+      through: models.DeveloperTokenScope,
       as: 'tokenScopes',
       constraints: false,
+      foreignKey: 'scopeId',
+    });
+
+    this.hasMany(models.DeveloperTokenScope, {
+      as: 'developerTokens',
+      constraints: false,
+      foreignKey: 'scopeId',
     });
   }
 }
@@ -32,6 +39,9 @@ module.exports = (sequelize) => {
       },
       description: {
         type: DataTypes.STRING(500),
+      },
+      group: {
+        type: DataTypes.STRING,
       },
     },
     {

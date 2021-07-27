@@ -80,6 +80,14 @@ const Scopes = ({ loading, getList, deleteScope, scopes, userData }) => {
       },
     },
     {
+      Header: 'Group',
+      accessor: 'group',
+      className: '',
+      headerStyle: {
+        width: '10rem',
+      },
+    },
+    {
       Header: 'Created At',
       accessor: 'createdAt',
       className: 'text-center',

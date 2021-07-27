@@ -92,7 +92,7 @@ const Table = ({
       srdir: sort.srdir,
       sort: sort.sort,
     }).then((res) => setExportUrl(res.url));
-  }, [fetchData, pageIndex, pageSize, search, sort]);
+  }, [pageIndex, pageSize, search, sort]);
 
   React.useEffect(() => {
     fetchData({

@@ -12,6 +12,8 @@ import thunk from 'redux-thunk';
 import authReducer from './store/reducers/auth';
 import actionsReducer from './store/reducers/actions';
 import scopesReducer from './store/reducers/scopes';
+import developerReducer from './store/reducers/developers';
+import developerTokenReducer from './store/reducers/developerTokens';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -24,6 +26,8 @@ const rootReducer = combineReducers({
   auth: authReducer,
   actions: actionsReducer,
   scopes: scopesReducer,
+  developers: developerReducer,
+  developerTokens: developerTokenReducer,
 });
 
 const store = createStore(

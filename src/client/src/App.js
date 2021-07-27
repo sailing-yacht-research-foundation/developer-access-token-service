@@ -18,6 +18,17 @@ import asyncComponent from './hoc/asyncComponent';
 const Home = asyncComponent(() => {
   return import('./pages/Home');
 });
+const DeveloperDetail = asyncComponent(() => {
+  return import('./pages/Home/Detail');
+});
+
+const DeveloperToken = asyncComponent(() => {
+  return import('./pages/DeveloperToken');
+});
+
+const DeveloperTokenDetail = asyncComponent(() => {
+  return import('./pages/DeveloperToken/Detail');
+});
 
 const Actions = asyncComponent(() => {
   return import('./pages/Actions');
@@ -53,8 +64,6 @@ const App = ({ validateToken: validateTokenProps, user, loading }) => {
   const isLogin = matchPath(currUrl, {
     path: '/login',
   });
-
-  debugger;
   if (loading) {
     return <div>Loading...</div>;
   } else if ((token && typeof token !== 'undefined') || isLogin) {
@@ -65,6 +74,17 @@ const App = ({ validateToken: validateTokenProps, user, loading }) => {
         <Route path="/actions/:id" exact component={ActionDetail} />
         <Route path="/actions" exact component={Actions} />
         <Route path="/login" component={Login} />
+        <Route
+          path="/developers/:developerId/tokens/:id"
+          exact
+          component={DeveloperTokenDetail}
+        />
+        <Route
+          path="/developers/:developerId/tokens"
+          exact
+          component={DeveloperToken}
+        />
+        <Route path="/developers/:id" exact component={DeveloperDetail} />
         <Route path="/" exact component={Home} />
       </Switch>
     );
