@@ -20,22 +20,25 @@ resource "aws_default_subnet" "default_subnet_c" {
   availability_zone = "us-east-2c"
 }
 
-resource "aws_ecr_repository" "developer_token_repo" {
-  name = "developer-token-repo"
+resource "aws_ecr_repository" "dev_token_repo" {
+  name = "dev-token-repo"
 }
 
-resource "aws_ecs_cluster" "developer_token_cluster" {
-  name = "developer-token-cluster" # Naming the cluster
+resource "aws_ecs_cluster" "dev_token_cluster" {
+  name = "dev-token-cluster" # Naming the cluster
 }
 
+resource "aws_cloudwatch_log_group" "dev_token_logs" {
+  name = "dev-token-logs"
+}
 
-resource "aws_ecs_task_definition" "developer_token_task" {
-  family                   = "developer-token-task" # Naming our first task
+resource "aws_ecs_task_definition" "dev_token_task" {
+  family                   = "dev-token-task" # Naming our first task
   container_definitions    = <<DEFINITION
   [
     {
-      "name": "developer-token-task",
-      "image": "${aws_ecr_repository.developer_token_repo.repository_url}",
+      "name": "dev-token-task",
+      "image": "${aws_ecr_repository.dev_token_repo.repository_url}",
       "essential": true,
       "portMappings": [
         {
@@ -43,6 +46,14 @@ resource "aws_ecs_task_definition" "developer_token_task" {
           "hostPort": 5000
         }
       ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "${aws_cloudwatch_log_group.dev_token_logs.name}",
+          "awslogs-region": "${var.aws_region}",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
       "memory": 512,
       "cpu": 256
     }
@@ -77,7 +88,7 @@ resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
 }
 
 resource "aws_alb" "application_load_balancer" {
-  name               = "developer-token-lb" # Naming our load balancer
+  name               = "dev-token-lb" # Naming our load balancer
   load_balancer_type = "application"
   subnets = [ # Referencing the default subnets
     "${aws_default_subnet.default_subnet_a.id}",
@@ -123,16 +134,16 @@ resource "aws_lb_listener" "listener" {
   }
 }
 
-resource "aws_ecs_service" "developer_token_service" {
-  name            = "developer-token-service"                        # Naming our first service
-  cluster         = aws_ecs_cluster.developer_token_cluster.id       # Referencing our created Cluster
-  task_definition = aws_ecs_task_definition.developer_token_task.arn # Referencing the task our service will spin up
+resource "aws_ecs_service" "dev_token_service" {
+  name            = "dev-token-service"                        # Naming our first service
+  cluster         = aws_ecs_cluster.dev_token_cluster.id       # Referencing our created Cluster
+  task_definition = aws_ecs_task_definition.dev_token_task.arn # Referencing the task our service will spin up
   launch_type     = "FARGATE"
   desired_count   = 2 # Setting the number of containers to 3
 
   load_balancer {
     target_group_arn = aws_lb_target_group.target_group.arn # Referencing our target group
-    container_name   = aws_ecs_task_definition.developer_token_task.family
+    container_name   = aws_ecs_task_definition.dev_token_task.family
     container_port   = 5000 # Specifying the container port
   }
 

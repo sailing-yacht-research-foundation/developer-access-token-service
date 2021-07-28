@@ -108,3 +108,4 @@ dist
 **/terraform.tfstate
 **/terraform.tfstate.backup
 **/.terraform
+.env.prod

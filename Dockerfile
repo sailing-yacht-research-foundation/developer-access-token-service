@@ -21,6 +21,8 @@ WORKDIR /app
 COPY ./src/api/package*.json ./
 RUN npm ci --only=production
 COPY ./src/api/ .
+COPY ../../.env.prod ./.env
 COPY --from=clientbuilder /app/build /app/public/build
 EXPOSE 5000
+
 CMD ["npm", "run", "start"]
