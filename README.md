@@ -15,6 +15,9 @@ Service that will be used to provide developer tokens for developers to use for 
 - [Development](#development)
   - [Running the Service](#running-the-service)
   - [Test Scripts](#test-scripts)
+- [Deployment](#deployment)
+  - [Resources Provisioning](#resources-provisioning)
+  - [Production Build](#production-build)
 
 # Authentication
 
