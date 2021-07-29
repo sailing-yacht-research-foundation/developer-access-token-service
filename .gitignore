@@ -109,3 +109,4 @@ dist
 **/terraform.tfstate.backup
 **/.terraform
 .env.prod
+.env.livedata
