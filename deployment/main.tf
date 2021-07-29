@@ -67,7 +67,7 @@ resource "aws_ecs_task_definition" "dev_token_task" {
 }
 
 resource "aws_iam_role" "ecsTaskExecutionRole" {
-  name               = "myEcsTaskExecutionRole"
+  name               = "devTokenEcsTaskExecutionRole"
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
 
@@ -116,8 +116,8 @@ resource "aws_security_group" "load_balancer_security_group" {
   }
 }
 
-resource "aws_lb_target_group" "target_group" {
-  name        = "target-group"
+resource "aws_lb_target_group" "dev_token_target_group" {
+  name        = "dev-token-target-group"
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
@@ -130,7 +130,7 @@ resource "aws_lb_listener" "listener" {
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.target_group.arn # Referencing our tagrte group
+    target_group_arn = aws_lb_target_group.dev_token_target_group.arn # Referencing our tagrte group
   }
 }
 
@@ -142,7 +142,7 @@ resource "aws_ecs_service" "dev_token_service" {
   desired_count   = 2 # Setting the number of containers to 3
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.target_group.arn # Referencing our target group
+    target_group_arn = aws_lb_target_group.dev_token_target_group.arn # Referencing our target group
     container_name   = aws_ecs_task_definition.dev_token_task.family
     container_port   = 5000 # Specifying the container port
   }
