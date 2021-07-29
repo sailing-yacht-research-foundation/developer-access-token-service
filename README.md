@@ -74,3 +74,46 @@ Running test suites :
 1. provide `.env.test` in `/src/api` with `access token` and `session/auth token` (check `.env.test-sample`)
 2. Run the service using `docker-compose up -d`
 3. Run this command `docker-compose exec dev-token-api npm run test`
+
+# Deployment
+
+There are 2 parts of deployment **Resources Provisioning** and **Production Build**
+
+## Resources Provisioning
+
+This steps required to provision resources in AWS environment using _Terraform_. To run terraform, follow this steps :
+
+1. provide `.env` file in `deployment/`
+2. `cd` into the `deployment/` directory
+3. run `dokcer-compose run terraform init`
+4. run `dokcer-compose run terraform apply`
+5. provide database password when promted
+6. follow the instructions prompted
+
+after the process, there will be some outputs
+
+- alb_dns_name : is the host of the app. this will be the base url for the API
+- ecr_repo_url : is the repo to push image
+
+this variables will be used in building image for production
+
+## Production Build
+
+following is the steps to build production image
+
+1. adjust environment variables, here is variables that should be checked
+
+- REACT_APP_STORAGE_API_BASE : your host address for example (http://example.com). this will be used for the UI to make request to
+- DB_HOST : database host address
+- DB_PORT : database port
+- DB_USER : database user
+- DB_PASSWORD : database password
+- DB_NAME : ddatabase name
+
+2. run `docker-compose -f production-compose.yml build`
+3. If this is first deployment, run `docker-compose -f production-compose.yml run --rm dev-token-service npm run dbsync` to migrate db structure
+4. tag the build, run `docker tag dev-token-service ecr_repo_url` (replace `ecr_repo_url` with the value from terrform steps)
+5. login your docker to authenticate push following [this](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html) steps
+6. push image, run `docker push ecr_repo_url`
+
+after the image is pushed. open the `alb_dns_name/v1/health` in browser. should reply with json message `ok`
