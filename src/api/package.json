@@ -9,6 +9,7 @@
     "format": "prettier-eslint --eslint-config-path ./.eslintrc.js --write '**/*.js'",
     "start": "node index",
     "dbsync": "node models/sync",
+    "seed": "node scripts/seedActions",
     "generateToken": "node scripts/generateAdminAccessToken"
   },
   "keywords": [],
