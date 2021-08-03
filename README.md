@@ -86,10 +86,10 @@ There are 2 parts of deployment **Resources Provisioning** and **Production Buil
 
 This steps required to provision resources in AWS environment using _Terraform_. To run terraform, follow this steps :
 
-1. provide `.env` file in `deployment/`
+1. provide `.env` file in `deployment/` (see `.env.sample`)
 2. `cd` into the `deployment/` directory
-3. run `dokcer-compose run terraform init`
-4. run `dokcer-compose run terraform apply`
+3. run `docker-compose run terraform init`
+4. run `docker-compose run terraform apply`
 5. provide database password when promted
 6. follow the instructions prompted
 
@@ -107,11 +107,13 @@ following is the steps to build production image
 1. adjust environment variables, here is variables that should be checked
 
 - REACT_APP_STORAGE_API_BASE : your host address for example (http://example.com). this will be used for the UI to make request to
+- REACT_APP_STORAGE_AUTH_KEY : local storage key to save token
 - DB_HOST : database host address
 - DB_PORT : database port
 - DB_USER : database user
 - DB_PASSWORD : database password
-- DB_NAME : ddatabase name
+- DB_NAME : database name
+- JWT_SECRET : JWT secret to create tokens
 
 2. run `docker-compose -f production-compose.yml build`
 3. If this is first deployment, run `docker-compose -f production-compose.yml run --rm dev-token-service npm run dbsync` to migrate db structure
