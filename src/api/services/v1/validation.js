@@ -32,6 +32,38 @@ exports.validateToken = async (token) => {
   });
 
   return {
+    id: result.id,
+    name: result.name,
+    developerId: result.developerId,
+    createdAt: result.createdAt,
+    scopes: scopes,
+    actions: Array.from(actions.values()),
+    developer: result.developer,
+  };
+};
+
+exports.validateTokenId = async (id) => {
+  let result = await dataAccess.getTokenById(id);
+
+  if (!result) throw new ServiceError('Inactive', statusCodes.NOT_FOUND);
+
+  let scopes = [];
+  let actions = new Map();
+
+  (result.developerTokenScopes || []).forEach((scope) => {
+    scopes.push({
+      id: scope.id,
+      name: scope.name,
+      group: scope.group,
+    });
+
+    (scope.actions || []).forEach((action) => {
+      actions.set(action.id, action);
+    });
+  });
+
+  return {
+    id: result.id,
     name: result.name,
     developerId: result.developerId,
     createdAt: result.createdAt,

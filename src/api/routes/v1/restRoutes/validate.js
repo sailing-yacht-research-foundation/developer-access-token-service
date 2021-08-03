@@ -13,4 +13,13 @@ router.post(
   }),
 );
 
+router.post(
+  '/token-id',
+  validation([body('tokenId').notEmpty()]),
+  asyncHandler(async (req, res) => {
+    let result = await services.validateTokenId(req.body.tokenId);
+    res.send(result);
+  }),
+);
+
 module.exports = router;

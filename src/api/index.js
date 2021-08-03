@@ -13,6 +13,5 @@ const PORT = parseInt(process.env.PORT) || 5000;
   } catch (err) {
     console.log('start failed');
     console.error(err);
-    console.log('retrying');
   }
 })();

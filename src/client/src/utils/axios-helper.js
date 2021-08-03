@@ -26,9 +26,11 @@ api.interceptors.request.use(
   },
 );
 
-export default {
+const axiosHelper = {
   api,
 };
+
+export default axiosHelper;
 
 export const changeToken = (newToken) => {
   api.defaults.headers.common['Authorization'] =
