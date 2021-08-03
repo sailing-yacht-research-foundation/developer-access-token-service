@@ -7,6 +7,12 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/version', (req, res) => {
+  res.status(200).send({
+    message: '1.0.0',
+  });
+});
+
 router.get('/error', () => {
   throw new ControllerError(
     'this error message should not appear in production',
