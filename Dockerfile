@@ -1,4 +1,4 @@
-FROM node:alpine as clientbuilder
+FROM node:16-alpine as clientbuilder
 WORKDIR /app
 COPY ./src/client/package*.json ./
 RUN npm ci --only=production
@@ -14,7 +14,7 @@ ENV REACT_APP_STORAGE_AUTH_KEY $REACT_APP_STORAGE_AUTH_KEY
 
 RUN npm run build
 
-FROM node:alpine
+FROM node:16-alpine
 
 WORKDIR /app
 
