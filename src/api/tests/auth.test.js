@@ -4,6 +4,9 @@ const faker = require('faker');
 const server = require('../servers/http');
 const version = '/v1';
 const accessToken = process.env.TEST_ACCESS_TOKEN;
+const token = process.env.TEST_AUTH_TOKEN;
+
+const jwt = require('jsonwebtoken');
 
 describe('REST : Auth', () => {
   let result = null;
@@ -60,6 +63,34 @@ describe('REST : Auth', () => {
       .send({
         token: accessToken,
       })
+      .expect(401);
+  });
+
+  test('GET /actions no token', () => {
+    return request(server)
+      .get(version + '/actions')
+      .expect(401);
+  });
+
+  test('GET /actions no bearer token', () => {
+    return request(server)
+      .get(version + '/actions')
+      .set('Authorization', token)
+      .expect(401);
+  });
+
+  test('GET /actions not a token', () => {
+    return request(server)
+      .get(version + '/actions')
+      .set('Authorization', 'Bearer ' + faker.datatype.string())
+      .expect(401);
+  });
+
+  test('GET /actions empty obj token', async () => {
+    const emptytoken = await jwt.sign('{}', process.env.JWT_SECRET);
+    await request(server)
+      .get(version + '/actions')
+      .set('Authorization', 'Bearer ' + emptytoken)
       .expect(401);
   });
 });

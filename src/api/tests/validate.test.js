@@ -9,6 +9,7 @@ describe('REST : Validate Developer Token', () => {
   let result = null;
   let id = null;
   let devtoken = null;
+  let devtokenData = null;
   let developer = null;
   let testData = {};
 
@@ -86,6 +87,7 @@ describe('REST : Validate Developer Token', () => {
       .expect(200)
       .then((response) => {
         result = response.body;
+        devtokenData = response.body;
         expect(response.body.id).toBeTruthy();
         expect(response.body.token).toBeTruthy();
         devtoken = response.body.token;
@@ -146,6 +148,55 @@ describe('REST : Validate Developer Token', () => {
       .expect(400);
   });
 
+  test('POST /validate/token-id', (done) => {
+    request(server)
+      .post(version + '/validate/token-id')
+      .send({ tokenId: devtokenData.id })
+      .expect(200)
+      .then((response) => {
+        result = response.body;
+        expect(response.body.id).toBe(devtokenData.id);
+        expect(response.body.name).toBeTruthy();
+        expect(response.body.developerId).toBe(developer.id);
+        expect(Array.isArray(response.body.scopes)).toBeTruthy();
+        expect(response.body.scopes.length).toBe(1);
+        expect(response.body.scopes[0].id).toBe(scope.id);
+        expect(response.body.scopes[0].name).toBe(scope.name);
+        expect(response.body.scopes[0].group).toBe(scope.group);
+
+        expect(Array.isArray(response.body.actions)).toBeTruthy();
+        expect(response.body.actions.length).toBe(2);
+
+        response.body.actions.forEach((action) => {
+          const testAction = actions.find((t) => t.name === action.name);
+
+          expect(action.id).toBe(testAction.id);
+          expect(action.name).toBe(testAction.name);
+          expect(action.service).toBe(testAction.service);
+        });
+
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test('POST /validate/token-id wrong token', () => {
+    return request(server)
+      .post(version + '/validate/token-id')
+      .set('Authorization', 'Bearer ' + token)
+      .send({ tokenId: faker.datatype.uuid() })
+      .expect(404);
+  });
+
+  test('POST /validate/token-id wrong body', () => {
+    return request(server)
+      .post(version + '/validate/token-id')
+      .send({})
+      .expect(400);
+  });
+
   test('DELETE /developer-tokens', () => {
     return request(server)
       .delete(version + '/developer-tokens/' + id)
@@ -157,6 +208,13 @@ describe('REST : Validate Developer Token', () => {
     return request(server)
       .post(version + '/validate')
       .send({ token: devtoken })
+      .expect(404);
+  });
+
+  test('POST /validate/token-id inactive token', () => {
+    return request(server)
+      .post(version + '/validate/token-id')
+      .send({ tokenId: devtokenData.id })
       .expect(404);
   });
 
