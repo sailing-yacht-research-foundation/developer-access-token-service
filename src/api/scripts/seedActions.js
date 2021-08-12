@@ -1,6 +1,7 @@
 const uuid = require('uuid');
 const db = require('../models');
 const liveDataActions = require('./live-data-actions.json');
+const streamingActions = require('./streaming-actions.json');
 
 (async () => {
   console.log('start seeding process');
@@ -9,14 +10,14 @@ const liveDataActions = require('./live-data-actions.json');
   let bulkScopeActions = [];
   const superAdminScope = {
     id: uuid.v4(),
-    name: 'super admin',
-    description: 'access to all resources',
+    name: 'live data super admin',
+    description: 'access to all resources in live data server',
     group: '',
   };
 
   bulkScope.push(superAdminScope);
 
-  console.log('populating bulk data');
+  console.log('populating live server bulk data');
   for (const scopeName in liveDataActions) {
     if (Object.hasOwnProperty.call(liveDataActions, scopeName)) {
       const scopeActions = liveDataActions[scopeName];
@@ -53,6 +54,58 @@ const liveDataActions = require('./live-data-actions.json');
           scopeId: scopeDef.manage.id,
           actionId: actionModel.id,
         });
+        bulkScopeActions.push({
+          id: uuid.v4(),
+          scopeId: superAdminScope.id,
+          actionId: actionModel.id,
+        });
+
+        if (action.startsWith('read'))
+          bulkScopeActions.push({
+            id: uuid.v4(),
+            scopeId: scopeDef.read.id,
+            actionId: actionModel.id,
+          });
+      });
+    }
+  }
+
+  const superAdminStreamingScope = {
+    id: uuid.v4(),
+    name: 'streaming super admin',
+    description: 'access to all resources in streaming server',
+    group: '',
+  };
+
+  bulkScope.push(superAdminStreamingScope);
+
+  console.log('populating streaming bulk data');
+  for (const scopeName in streamingActions) {
+    if (Object.hasOwnProperty.call(streamingActions, scopeName)) {
+      const scopeActions = streamingActions[scopeName];
+      const scopeCleanName = scopeName.replace(/_/g, ' ');
+      console.log(scopeCleanName);
+      const scopeDef = {
+        read: {
+          id: uuid.v4(),
+          name: 'read ' + scopeCleanName,
+          description: 'access to read ' + scopeCleanName,
+          group: scopeCleanName,
+        },
+      };
+
+      bulkScope.push(scopeDef.manage);
+      bulkScope.push(scopeDef.read);
+
+      scopeActions.forEach((action) => {
+        let actionModel = {
+          id: uuid.v4(),
+          name: action,
+          service: 'streaming-server',
+        };
+
+        bulkActions.push(actionModel);
+
         bulkScopeActions.push({
           id: uuid.v4(),
           scopeId: superAdminScope.id,
