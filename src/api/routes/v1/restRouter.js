@@ -7,6 +7,7 @@ const actionRouter = require('./restRoutes/action');
 const developerRouter = require('./restRoutes/developer');
 const developerTokenRouter = require('./restRoutes/developerToken');
 const validateRouter = require('./restRoutes/validate');
+const migrationRouter = require('./restRoutes/migration');
 
 router.use('/auth', authRouter);
 router.use('/health', healthRouter);
@@ -15,5 +16,6 @@ router.use('/actions', auth(), actionRouter);
 router.use('/developers', auth(), developerRouter);
 router.use('/developer-tokens', auth(), developerTokenRouter);
 router.use('/validate', validateRouter);
+router.use('/migration', migrationRouter);
 
 module.exports = router;
