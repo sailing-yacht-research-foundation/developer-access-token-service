@@ -14,7 +14,7 @@ router.post(
     if (req.query.key !== process.env.MIGRATION_KEY) {
       throw new ControllerError('Forbidden', statusCodes.FORBIDDEN);
     }
-    await sync();
+    await sync(req.query.force === 'true');
     res.status(200).send({
       message: 'ok',
     });

@@ -40,8 +40,8 @@ db.startDB = async () => {
   await sequelize.authenticate();
 };
 
-db.sync = async () => {
-  await db.sequelize.sync({ force: true });
+db.sync = async (force = false) => {
+  await db.sequelize.sync({ force });
 };
 
 module.exports = db;
