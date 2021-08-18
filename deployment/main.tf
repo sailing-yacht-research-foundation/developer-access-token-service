@@ -122,6 +122,9 @@ resource "aws_lb_target_group" "dev_token_target_group" {
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = aws_default_vpc.default_vpc.id # Referencing the default VPC
+  health_check {
+    path = "/v1/health"
+  }
 }
 
 resource "aws_lb_listener" "listener" {
