@@ -20,6 +20,7 @@ services:
       - PORT=${PORT}
       - JWT_SECRET=${JWT_SECRET}
       - TOKEN_EXPIRE=${TOKEN_EXPIRE}
+      - MIGRATION_KEY=${MIGRATION_KEY}
     ports:
       - ${SERVER_PORT_MAP}:${PORT}
       - 9229:9229
