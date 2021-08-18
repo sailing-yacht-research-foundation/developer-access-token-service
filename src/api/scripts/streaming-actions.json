@@ -1,0 +1,26 @@
+{
+  "vessel": ["read_all_vessels", "read_vessel_details"],
+  "calendar_event": ["read_all_calendar_events", "read_calendar_event_details"],
+  "competition_unit": [
+    "read_all_competition_units",
+    "read_competition_unit_details"
+  ],
+  "participant": ["read_all_participants", "read_participant_details"],
+  "course": ["read_all_courses", "read_course_details"],
+  "sequenced_geometry": ["read_course_sequenced_geometry"],
+  "unsequenced_geometry": ["read_course_unsequenced_geometry"],
+  "timed_geometry": ["read_course_timed_geometry"],
+  "vessel_participant_group": [
+    "read_all_vessel_participant_groups",
+    "read_vessel_participant_group_details",
+    "read_unregistered_vessel_in_groups",
+    "read_unregistered_participant_in_groups"
+  ],
+  "vessel_participant": [
+    "read_all_vessel_participants",
+    "read_vessel_participant_details",
+    "read_participant_in_vessel_participant",
+    "read_participants_in_vessel_participant"
+  ],
+  "stream_data": ["subscribe_to_stream"]
+}
