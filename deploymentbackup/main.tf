@@ -6,14 +6,14 @@ terraform {
     }
   }
 
-  backend "s3" {
-    bucket = "syrf-dev-token-terraform-state"
-    key    = "global/s3/terraform.tfstate"
-    region = "us-east-1"
-  
-    dynamodb_table = "syrf-dev-token-terraform-state"
-    encrypt = true
-  }
+# backend "s3" {
+#   bucket = "syrf-dev-token-terraform-state"
+#   key    = "global/s3/terraform.tfstate"
+#   region = "us-east-1"
+# 
+#   dynamodb_table = "dev-token-terraform-state-locking"
+#   encrypt = true
+# }
 
 }
 
@@ -88,7 +88,7 @@ resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
 resource "aws_alb" "application_load_balancer" {
   name               = "dev-token-lb" # Naming our load balancer
   load_balancer_type = "application"
-  subnets = ["subnet-0b991066a3689c0a9", "subnet-0e8bf2fe60aa75a1d", "subnet-03edca35c8e6d824b"]
+  subnets = ["subnet-0f26c9cfb54dc1283", "subnet-064b3ecd2cd9870d3", "subnet-0a5e0f272ad1948ac"]
   # Referencing the security group
   security_groups = [aws_security_group.load_balancer_security_group.id]
 }
@@ -96,7 +96,7 @@ resource "aws_alb" "application_load_balancer" {
 # Creating a security group for the load balancer:
 resource "aws_security_group" "load_balancer_security_group" {
 
-  vpc_id = "vpc-02060b6e63c86da41"
+  vpc_id = "vpc-06fc2c81865587bc6"
   ingress {
     from_port   = 80
     to_port     = 80
@@ -119,10 +119,7 @@ resource "aws_lb_target_group" "dev_token_target_group" {
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
-  vpc_id      = "vpc-02060b6e63c86da41" # Referencing the default VPC
-  health_check {
-    path = "/v1/health"
-  }
+  vpc_id      = "vpc-06fc2c81865587bc6" # Referencing the default VPC
   depends_on  = ["aws_alb.application_load_balancer"]
 }
 
@@ -150,7 +147,7 @@ resource "aws_ecs_service" "dev_token_service" {
   }
 
   network_configuration {
-    subnets          = ["subnet-0b991066a3689c0a9", "subnet-0e8bf2fe60aa75a1d", "subnet-03edca35c8e6d824b"]
+    subnets          = ["subnet-0f26c9cfb54dc1283", "subnet-064b3ecd2cd9870d3", "subnet-0a5e0f272ad1948ac"]
     assign_public_ip = true                                                # Providing our containers with public IPs
     security_groups  = [aws_security_group.service_security_group.id] # Setting the security group
   }
@@ -158,7 +155,7 @@ resource "aws_ecs_service" "dev_token_service" {
 
 
 resource "aws_security_group" "service_security_group" {
-  vpc_id = "vpc-02060b6e63c86da41" # Referencing our syrf VPC
+  vpc_id = "vpc-06fc2c81865587bc6" # Referencing our syrf VPC
   ingress {
     from_port = 0
     to_port   = 0
