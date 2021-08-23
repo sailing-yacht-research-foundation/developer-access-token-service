@@ -120,6 +120,9 @@ resource "aws_lb_target_group" "dev_token_target_group" {
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = "vpc-02060b6e63c86da41" # Referencing the default VPC
+  health_check {
+    path = "/v1/health"
+  }
   depends_on  = ["aws_alb.application_load_balancer"]
 }
 
