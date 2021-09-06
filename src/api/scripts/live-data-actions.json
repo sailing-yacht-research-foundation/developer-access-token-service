@@ -18,7 +18,14 @@
     "read_competition_unit_details",
     "create_competition_units",
     "update_competition_units",
-    "delete_competition_units"
+    "delete_competition_units",
+    "search_races",
+    "prepare_race",
+    "stop_race",
+    "read_race_tracks",
+    "read_race_events",
+    "read_race_legs",
+    "read_race_result"
   ],
   "participant": [
     "read_all_participants",
@@ -67,7 +74,18 @@
     "read_participant_in_vessel_participant",
     "read_participants_in_vessel_participant",
     "add_participants_to_vessel_participant",
-    "delete_participants_from_vessel_participant"
+    "delete_participants_from_vessel_participant",
+    "read_vessel_participant_tracks",
+    "read_vessel_participant_events",
+    "read_vessel_participant_legs"
+  ],
+  "user_management": [
+    "add_user",
+    "update_password",
+    "update_user",
+    "send_verify_email",
+    "execute_actions_email",
+    "read_user_detail"
   ],
   "live_data": ["produce_live_data_stream"]
 }
