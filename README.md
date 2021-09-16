@@ -100,6 +100,20 @@ after the process, there will be some outputs
 
 this variables will be used in building image for production
 
+## Development Build
+
+This service was deployed to aws development environment using terraform similar to the raw server service
+In the terraform file the vpc id that was created for the first service was used. So all the services that was deployed (raw server, live data server and developer token) were all deployed in the same vpc 
+the credentials for the database was used in the .env file when building the image
+
+To deploy the service you need to run
+docker-compose -f deployment/docker-compose.yml run --rm terraform init
+docker-compose -f deployment/docker-compose.yml run --rm terraform validate
+docker-compose -f deployment/docker-compose.yml run --rm terraform plan
+docker-compose -f deployment/docker-compose.yml run --rm terraform apply
+after running terraform apply you need to build the image and push the image to ecr
+the service can be accessed from this url - http://dev-token-lb-662457357.us-east-1.elb.amazonaws.com/login
+
 ## Production Build
 
 following is the steps to build production image
