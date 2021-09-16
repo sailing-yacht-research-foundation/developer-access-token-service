@@ -11,7 +11,7 @@ ARG REACT_APP_STORAGE_AUTH_KEY
 ENV INLINE_RUNTIME_CHUNK $INLINE_RUNTIME_CHUNK
 ENV REACT_APP_STORAGE_API_BASE $REACT_APP_STORAGE_API_BASE
 ENV REACT_APP_STORAGE_AUTH_KEY $REACT_APP_STORAGE_AUTH_KEY
-
+RUN npm install
 #RUN npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
 RUN npm run build
 
@@ -22,7 +22,7 @@ WORKDIR /app
 COPY ./src/api/package*.json ./
 RUN npm ci --only=production
 COPY ./src/api/ .
-COPY ../../.env.prod ./.env
+#COPY ../../.env ./.env
 COPY --from=clientbuilder /app/build /app/public/build
 EXPOSE 5000
 
