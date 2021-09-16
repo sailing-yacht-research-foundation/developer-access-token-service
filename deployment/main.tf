@@ -10,9 +10,9 @@ terraform {
     bucket = "syrf-dev-token-terraform-state"
     key    = "global/s3/terraform.tfstate"
     region = "us-east-1"
-  
+
     dynamodb_table = "syrf-dev-token-terraform-state"
-    encrypt = true
+    encrypt        = true
   }
 
 }
@@ -44,6 +44,29 @@ resource "aws_ecs_task_definition" "dev_token_task" {
           "hostPort": 5000
         }
       ],
+
+      "environment": [
+        { "name": "PORT", "value": "8000" },
+        { "name": "DB_HOST", "value": "${var.db_host}" },
+        { "name": "DB_PORT", "value": "${var.db_port}" },
+        { "name": "DB_USER", "value": "${var.db_user}" },
+        { "name": "DB_PASSWORD", "value": "${var.db_password}" },
+        { "name": "DB_NAME", "value": "${var.db_name}" },
+        { "name": "JWT_SECRET", "value": "${var.jwt_secret}" },
+        { "name": "ID_CHIPER_KEY", "value": "${var.id_chiper_key}" },
+        { "name": "ID_CHIPER_ALG", "value": "${var.id_chiper_alg}" },
+        { "name": "ID_CHIPER_IV", "value": "${var.id_chiper_iv}" },
+        { "name": "TOKEN_EXPIRE", "value": "${var.token_expire}" },
+        { "name": "SERVER_PORT_MAP", "value": "${var.server_port_map}" },
+        { "name": "DB_PORT_MAP", "value": "${var.db_port_map}" },
+        { "name": "CLIENT_PORT_MAP", "value": "${var.client_port_map}" },
+        { "name": "STORAGE_AUTH_KEY", "value": "${var.storage_auth_key}" },
+        { "name": "NODE_ENV", "value": "${var.node_env}" },
+        { "name": "CLIENT_PORT", "value": "${var.client_port}" },
+        
+      ],
+
+
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
@@ -88,7 +111,7 @@ resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
 resource "aws_alb" "application_load_balancer" {
   name               = "dev-token-lb" # Naming our load balancer
   load_balancer_type = "application"
-  subnets = ["subnet-0b991066a3689c0a9", "subnet-0e8bf2fe60aa75a1d", "subnet-03edca35c8e6d824b"]
+  subnets            = ["subnet-0b991066a3689c0a9", "subnet-0e8bf2fe60aa75a1d", "subnet-03edca35c8e6d824b"]
   # Referencing the security group
   security_groups = [aws_security_group.load_balancer_security_group.id]
 }
@@ -123,7 +146,7 @@ resource "aws_lb_target_group" "dev_token_target_group" {
   health_check {
     path = "/v1/health"
   }
-  depends_on  = ["aws_alb.application_load_balancer"]
+  depends_on = ["aws_alb.application_load_balancer"]
 }
 
 resource "aws_lb_listener" "listener" {
@@ -151,7 +174,7 @@ resource "aws_ecs_service" "dev_token_service" {
 
   network_configuration {
     subnets          = ["subnet-0b991066a3689c0a9", "subnet-0e8bf2fe60aa75a1d", "subnet-03edca35c8e6d824b"]
-    assign_public_ip = true                                                # Providing our containers with public IPs
+    assign_public_ip = true                                           # Providing our containers with public IPs
     security_groups  = [aws_security_group.service_security_group.id] # Setting the security group
   }
 }
