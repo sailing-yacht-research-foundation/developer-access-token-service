@@ -3,10 +3,10 @@ variable "aws_region" {
   type    = string
 }
 variable "port" {
-  default = 8000
+  default = 5000
 }
 variable "db_host" {
-  default     = "mydb.c4oiwp1bgxbr.us-east-1.rds.amazonaws.com"
+  default     = "syrf-backend-development.csvvxrzxjbev.us-east-1.rds.amazonaws.com"
   description = "connecting to remote db"
 }
 
@@ -56,7 +56,7 @@ variable "token_expire" {
 }
 
 variable "server_port_map" {
-  default = 8000
+  default = 5000
 
 }
 

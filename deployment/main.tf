@@ -46,7 +46,7 @@ resource "aws_ecs_task_definition" "dev_token_task" {
       ],
 
       "environment": [
-        { "name": "PORT", "value": "8000" },
+        { "name": "PORT", "value": "5000" },
         { "name": "DB_HOST", "value": "${var.db_host}" },
         { "name": "DB_PORT", "value": "${var.db_port}" },
         { "name": "DB_USER", "value": "${var.db_user}" },
@@ -62,7 +62,7 @@ resource "aws_ecs_task_definition" "dev_token_task" {
         { "name": "CLIENT_PORT_MAP", "value": "${var.client_port_map}" },
         { "name": "STORAGE_AUTH_KEY", "value": "${var.storage_auth_key}" },
         { "name": "NODE_ENV", "value": "${var.node_env}" },
-        { "name": "CLIENT_PORT", "value": "${var.client_port}" },
+        { "name": "CLIENT_PORT", "value": "${var.client_port}" }
         
       ],
 
