@@ -46,7 +46,6 @@ resource "aws_ecs_task_definition" "dev_token_task" {
       ],
 
       "environment": [
-        { "name": "PORT", "value": "5000" },
         { "name": "DB_HOST", "value": "${var.db_host}" },
         { "name": "DB_PORT", "value": "${var.db_port}" },
         { "name": "DB_USER", "value": "${var.db_user}" },
