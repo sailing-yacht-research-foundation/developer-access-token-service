@@ -31,12 +31,12 @@ variable "db_name" {
 }
 
 variable "jwt_secret" {
-  default = "VAr{_h8EjOF0j9b>9fs2"
+  default = ""
 
 }
 
 variable "id_chiper_key" {
-  default = "sZlQfFAHZxsKk2I147DS8tNIjXMbe1e9"
+  default = ""
 
 }
 
@@ -46,7 +46,7 @@ variable "id_chiper_alg" {
 }
 
 variable "id_chiper_iv" {
-  default = "fLmgHeoqxk3uSpXq"
+  default = ""
 
 }
 
