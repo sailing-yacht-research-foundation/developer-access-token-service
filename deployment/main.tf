@@ -1,24 +1,22 @@
-provider "aws" {
-  version = "~> 2.0"
-  region  = var.aws_region
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.27"
+    }
+  }
+
+  backend "s3" {
+    bucket = "syrf-dev-token-terraform-state"
+    key    = "global/s3/terraform.tfstate"
+    region = "us-east-1"
+
+    dynamodb_table = "syrf-dev-token-terraform-state"
+    encrypt        = true
+  }
+
 }
 
-# Providing a reference to our default VPC
-resource "aws_default_vpc" "default_vpc" {
-}
-
-# Providing a reference to our default subnets
-resource "aws_default_subnet" "default_subnet_a" {
-  availability_zone = "us-east-2a"
-}
-
-resource "aws_default_subnet" "default_subnet_b" {
-  availability_zone = "us-east-2b"
-}
-
-resource "aws_default_subnet" "default_subnet_c" {
-  availability_zone = "us-east-2c"
-}
 
 resource "aws_ecr_repository" "dev_token_repo" {
   name = "dev-token-repo"
@@ -46,6 +44,29 @@ resource "aws_ecs_task_definition" "dev_token_task" {
           "hostPort": 5000
         }
       ],
+
+      "environment": [
+        { "name": "PORT", "value": "8000" },
+        { "name": "DB_HOST", "value": "${var.db_host}" },
+        { "name": "DB_PORT", "value": "${var.db_port}" },
+        { "name": "DB_USER", "value": "${var.db_user}" },
+        { "name": "DB_PASSWORD", "value": "${var.db_password}" },
+        { "name": "DB_NAME", "value": "${var.db_name}" },
+        { "name": "JWT_SECRET", "value": "${var.jwt_secret}" },
+        { "name": "ID_CHIPER_KEY", "value": "${var.id_chiper_key}" },
+        { "name": "ID_CHIPER_ALG", "value": "${var.id_chiper_alg}" },
+        { "name": "ID_CHIPER_IV", "value": "${var.id_chiper_iv}" },
+        { "name": "TOKEN_EXPIRE", "value": "${var.token_expire}" },
+        { "name": "SERVER_PORT_MAP", "value": "${var.server_port_map}" },
+        { "name": "DB_PORT_MAP", "value": "${var.db_port_map}" },
+        { "name": "CLIENT_PORT_MAP", "value": "${var.client_port_map}" },
+        { "name": "STORAGE_AUTH_KEY", "value": "${var.storage_auth_key}" },
+        { "name": "NODE_ENV", "value": "${var.node_env}" },
+        { "name": "CLIENT_PORT", "value": "${var.client_port}" },
+        
+      ],
+
+
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
@@ -90,17 +111,15 @@ resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
 resource "aws_alb" "application_load_balancer" {
   name               = "dev-token-lb" # Naming our load balancer
   load_balancer_type = "application"
-  subnets = [ # Referencing the default subnets
-    "${aws_default_subnet.default_subnet_a.id}",
-    "${aws_default_subnet.default_subnet_b.id}",
-    "${aws_default_subnet.default_subnet_c.id}"
-  ]
+  subnets            = ["subnet-0b991066a3689c0a9", "subnet-0e8bf2fe60aa75a1d", "subnet-03edca35c8e6d824b"]
   # Referencing the security group
-  security_groups = ["${aws_security_group.load_balancer_security_group.id}"]
+  security_groups = [aws_security_group.load_balancer_security_group.id]
 }
 
 # Creating a security group for the load balancer:
 resource "aws_security_group" "load_balancer_security_group" {
+
+  vpc_id = "vpc-02060b6e63c86da41"
   ingress {
     from_port   = 80
     to_port     = 80
@@ -117,14 +136,17 @@ resource "aws_security_group" "load_balancer_security_group" {
 }
 
 resource "aws_lb_target_group" "dev_token_target_group" {
+
+
   name        = "dev-token-target-group"
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
-  vpc_id      = aws_default_vpc.default_vpc.id # Referencing the default VPC
+  vpc_id      = "vpc-02060b6e63c86da41" # Referencing the default VPC
   health_check {
     path = "/v1/health"
   }
+  depends_on = ["aws_alb.application_load_balancer"]
 }
 
 resource "aws_lb_listener" "listener" {
@@ -142,7 +164,7 @@ resource "aws_ecs_service" "dev_token_service" {
   cluster         = aws_ecs_cluster.dev_token_cluster.id       # Referencing our created Cluster
   task_definition = aws_ecs_task_definition.dev_token_task.arn # Referencing the task our service will spin up
   launch_type     = "FARGATE"
-  desired_count   = 2 # Setting the number of containers to 3
+  desired_count   = 1 # Setting the number of containers to 3
 
   load_balancer {
     target_group_arn = aws_lb_target_group.dev_token_target_group.arn # Referencing our target group
@@ -151,20 +173,28 @@ resource "aws_ecs_service" "dev_token_service" {
   }
 
   network_configuration {
-    subnets          = ["${aws_default_subnet.default_subnet_a.id}", "${aws_default_subnet.default_subnet_b.id}", "${aws_default_subnet.default_subnet_c.id}"]
-    assign_public_ip = true                                                # Providing our containers with public IPs
-    security_groups  = ["${aws_security_group.service_security_group.id}"] # Setting the security group
+    subnets          = ["subnet-0b991066a3689c0a9", "subnet-0e8bf2fe60aa75a1d", "subnet-03edca35c8e6d824b"]
+    assign_public_ip = true                                           # Providing our containers with public IPs
+    security_groups  = [aws_security_group.service_security_group.id] # Setting the security group
   }
 }
 
 
 resource "aws_security_group" "service_security_group" {
+  vpc_id = "vpc-02060b6e63c86da41" # Referencing our syrf VPC
   ingress {
     from_port = 0
     to_port   = 0
     protocol  = "-1"
     # Only allowing traffic in from the load balancer security group
-    security_groups = ["${aws_security_group.load_balancer_security_group.id}"]
+    security_groups = [aws_security_group.load_balancer_security_group.id]
+  }
+
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
