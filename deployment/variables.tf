@@ -3,10 +3,10 @@ variable "aws_region" {
   type    = string
 }
 variable "port" {
-  default = 8000
+  default = 5000
 }
 variable "db_host" {
-  default     = "mydb.c4oiwp1bgxbr.us-east-1.rds.amazonaws.com"
+  default     = "syrf-backend-development.csvvxrzxjbev.us-east-1.rds.amazonaws.com"
   description = "connecting to remote db"
 }
 
@@ -31,12 +31,12 @@ variable "db_name" {
 }
 
 variable "jwt_secret" {
-  default = "VAr{_h8EjOF0j9b>9fs2"
+  default = ""
 
 }
 
 variable "id_chiper_key" {
-  default = "sZlQfFAHZxsKk2I147DS8tNIjXMbe1e9"
+  default = ""
 
 }
 
@@ -46,7 +46,7 @@ variable "id_chiper_alg" {
 }
 
 variable "id_chiper_iv" {
-  default = "fLmgHeoqxk3uSpXq"
+  default = ""
 
 }
 
@@ -56,7 +56,7 @@ variable "token_expire" {
 }
 
 variable "server_port_map" {
-  default = 8000
+  default = 5000
 
 }
 
