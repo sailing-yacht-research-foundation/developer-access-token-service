@@ -8,22 +8,33 @@ exports.seed = async () => {
   let bulkActions = [];
   let bulkScope = [];
   let bulkScopeActions = [];
-  const superAdminScope = {
+  let superAdminScope = {
     id: uuid.v4(),
     name: 'live data super admin',
     description: 'access to all resources in live data server',
     group: '',
   };
 
-  bulkScope.push(superAdminScope);
+  const allActions = await db.Action.findAll();
+  const allScopes = await db.Scope.findAll();
+  const allScopeActions = await db.ScopeAction.findAll();
+
+  let anyIndex = allScopes.findIndex((t) => t.name === superAdminScope.name);
+
+  if (anyIndex < 0) {
+    bulkScope.push(superAdminScope);
+  } else {
+    superAdminScope = allScopes[anyIndex];
+  }
 
   console.log('populating live server bulk data');
   for (const scopeName in liveDataActions) {
     if (Object.hasOwnProperty.call(liveDataActions, scopeName)) {
       const scopeActions = liveDataActions[scopeName];
       const scopeCleanName = scopeName.replace(/_/g, ' ');
+
       console.log(scopeCleanName);
-      const scopeDef = {
+      let scopeDef = {
         manage: {
           id: uuid.v4(),
           name: 'manage live server ' + scopeCleanName,
@@ -38,8 +49,13 @@ exports.seed = async () => {
         },
       };
 
-      bulkScope.push(scopeDef.manage);
-      bulkScope.push(scopeDef.read);
+      anyIndex = allScopes.findIndex((t) => t.name === scopeDef.manage.name);
+      if (anyIndex < 0) bulkScope.push(scopeDef.manage);
+      else scopeDef.manage = allScopes[anyIndex];
+
+      anyIndex = allScopes.findIndex((t) => t.name === scopeDef.read.name);
+      if (anyIndex < 0) bulkScope.push(scopeDef.read);
+      else scopeDef.read = allScopes[anyIndex];
 
       scopeActions.forEach((action) => {
         let actionModel = {
@@ -48,19 +64,52 @@ exports.seed = async () => {
           service: 'live-data-server',
         };
 
-        bulkActions.push(actionModel);
-        bulkScopeActions.push({
-          id: uuid.v4(),
-          scopeId: scopeDef.manage.id,
-          actionId: actionModel.id,
-        });
-        bulkScopeActions.push({
-          id: uuid.v4(),
-          scopeId: superAdminScope.id,
-          actionId: actionModel.id,
-        });
+        anyIndex = allActions.findIndex(
+          (t) =>
+            t.name === actionModel.name && t.service === actionModel.service,
+        );
+        if (anyIndex < 0) {
+          console.log(
+            'adding action : ',
+            actionModel.name,
+            scopeDef.manage.name,
+          );
+          bulkActions.push(actionModel);
+        } else {
+          actionModel = allActions[anyIndex];
+        }
 
-        if (action.startsWith('read'))
+        if (
+          allScopeActions.findIndex(
+            (t) =>
+              t.scopeId === scopeDef.manage.id && t.actionId === actionModel.id,
+          ) < 0
+        )
+          bulkScopeActions.push({
+            id: uuid.v4(),
+            scopeId: scopeDef.manage.id,
+            actionId: actionModel.id,
+          });
+
+        if (
+          allScopeActions.findIndex(
+            (t) =>
+              t.scopeId === superAdminScope.id && t.actionId === actionModel.id,
+          ) < 0
+        )
+          bulkScopeActions.push({
+            id: uuid.v4(),
+            scopeId: superAdminScope.id,
+            actionId: actionModel.id,
+          });
+
+        if (
+          action.startsWith('read') &&
+          allScopeActions.findIndex(
+            (t) =>
+              t.scopeId === scopeDef.read.id && t.actionId === actionModel.id,
+          ) < 0
+        )
           bulkScopeActions.push({
             id: uuid.v4(),
             scopeId: scopeDef.read.id,
@@ -70,14 +119,21 @@ exports.seed = async () => {
     }
   }
 
-  const superAdminStreamingScope = {
+  let superAdminStreamingScope = {
     id: uuid.v4(),
     name: 'streaming super admin',
     description: 'access to all resources in streaming server',
     group: '',
   };
 
-  bulkScope.push(superAdminStreamingScope);
+  anyIndex = allScopes.findIndex(
+    (t) => t.name === superAdminStreamingScope.name,
+  );
+  if (anyIndex < 0) {
+    bulkScope.push(superAdminStreamingScope);
+  } else {
+    superAdminStreamingScope = allScopes[anyIndex];
+  }
 
   console.log('populating streaming bulk data');
   for (const scopeName in streamingActions) {
@@ -85,7 +141,7 @@ exports.seed = async () => {
       const scopeActions = streamingActions[scopeName];
       const scopeCleanName = scopeName.replace(/_/g, ' ');
       console.log(scopeCleanName);
-      const scopeDef = {
+      let scopeDef = {
         read: {
           id: uuid.v4(),
           name: 'read streaming server ' + scopeCleanName,
@@ -94,8 +150,9 @@ exports.seed = async () => {
         },
       };
 
-      bulkScope.push(scopeDef.manage);
-      bulkScope.push(scopeDef.read);
+      anyIndex = allScopes.findIndex((t) => t.name === scopeDef.read.name);
+      if (anyIndex < 0) bulkScope.push(scopeDef.read);
+      else scopeDef.read = allScopes[anyIndex];
 
       scopeActions.forEach((action) => {
         let actionModel = {
@@ -104,15 +161,36 @@ exports.seed = async () => {
           service: 'streaming-server',
         };
 
-        bulkActions.push(actionModel);
+        anyIndex = allActions.findIndex(
+          (t) =>
+            t.name === actionModel.name && t.service === actionModel.service,
+        );
+        if (anyIndex < 0) {
+          bulkActions.push(actionModel);
+        } else {
+          actionModel = allActions[anyIndex];
+        }
 
-        bulkScopeActions.push({
-          id: uuid.v4(),
-          scopeId: superAdminScope.id,
-          actionId: actionModel.id,
-        });
+        if (
+          allScopeActions.findIndex(
+            (t) =>
+              t.scopeId === superAdminStreamingScope.id &&
+              t.actionId === actionModel.id,
+          ) < 0
+        )
+          bulkScopeActions.push({
+            id: uuid.v4(),
+            scopeId: superAdminStreamingScope.id,
+            actionId: actionModel.id,
+          });
 
-        if (action.startsWith('read'))
+        if (
+          action.startsWith('read') &&
+          allScopeActions.findIndex(
+            (t) =>
+              t.scopeId === scopeDef.read.id && t.actionId === actionModel.id,
+          ) < 0
+        )
           bulkScopeActions.push({
             id: uuid.v4(),
             scopeId: scopeDef.read.id,
