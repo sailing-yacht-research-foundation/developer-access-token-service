@@ -99,5 +99,6 @@
     "delete_user"
   ],
   "track_now": ["read_current_track", "start_track", "stop_track"],
-  "live_data": ["produce_live_data_stream"]
+  "live_data": ["produce_live_data_stream"],
+  "my_tracks": ["read_my_tracks"]
 }
