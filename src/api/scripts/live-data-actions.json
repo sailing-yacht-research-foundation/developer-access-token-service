@@ -25,14 +25,21 @@
     "read_race_tracks",
     "read_race_events",
     "read_race_legs",
-    "read_race_result"
+    "read_race_result",
+    "read_race_time",
+    "read_race_simplified_tracks"
   ],
   "participant": [
     "read_all_participants",
     "read_participant_details",
     "create_participants",
     "update_participants",
-    "delete_participants"
+    "delete_participants",
+    "update_participants_user",
+    "read_my_participations",
+    "read_participant_event",
+    "read_participant_race",
+    "register_user"
   ],
   "course": [
     "read_all_courses",
@@ -77,7 +84,9 @@
     "delete_participants_from_vessel_participant",
     "read_vessel_participant_tracks",
     "read_vessel_participant_events",
-    "read_vessel_participant_legs"
+    "read_vessel_participant_legs",
+    "read_vessels_race_time",
+    "read_vessel_participant_simplified_tracks"
   ],
   "user_management": [
     "add_user",
@@ -85,7 +94,10 @@
     "update_user",
     "send_verify_email",
     "execute_actions_email",
-    "read_user_detail"
+    "read_user_detail",
+    "upload_avatar",
+    "delete_user"
   ],
+  "track_now": ["read_current_track", "start_track", "stop_track"],
   "live_data": ["produce_live_data_stream"]
 }
