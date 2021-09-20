@@ -100,5 +100,9 @@
   ],
   "track_now": ["read_current_track", "start_track", "stop_track"],
   "live_data": ["produce_live_data_stream"],
-  "my_tracks": ["read_my_tracks"]
+  "my_tracks": [
+    "read_my_tracks",
+    "read_track_by_crew",
+    "read_track_time_by_crew"
+  ]
 }
