@@ -45,27 +45,12 @@ resource "aws_ecs_task_definition" "dev_token_task" {
         }
       ],
 
-      "environment": [
-        { "name": "PORT", "value": "${var.port}" },
-        { "name": "DB_HOST", "value": "${var.db_host}" },
-        { "name": "DB_PORT", "value": "${var.db_port}" },
-        { "name": "DB_USER", "value": "${var.db_user}" },
-        { "name": "DB_PASSWORD", "value": "${var.db_password}" },
-        { "name": "DB_NAME", "value": "${var.db_name}" },
-        { "name": "JWT_SECRET", "value": "${var.jwt_secret}" },
-        { "name": "ID_CHIPER_KEY", "value": "${var.id_chiper_key}" },
-        { "name": "ID_CHIPER_ALG", "value": "${var.id_chiper_alg}" },
-        { "name": "ID_CHIPER_IV", "value": "${var.id_chiper_iv}" },
-        { "name": "TOKEN_EXPIRE", "value": "${var.token_expire}" },
-        { "name": "SERVER_PORT_MAP", "value": "${var.server_port_map}" },
-        { "name": "DB_PORT_MAP", "value": "${var.db_port_map}" },
-        { "name": "CLIENT_PORT_MAP", "value": "${var.client_port_map}" },
-        { "name": "STORAGE_AUTH_KEY", "value": "${var.storage_auth_key}" },
-        { "name": "NODE_ENV", "value": "${var.node_env}" },
-        { "name": "CLIENT_PORT", "value": "${var.client_port}" }
-        
-      ],
-
+      "environmentFiles": [
+               {
+                   "value": "arn:aws:s3:::syrf-dev-env-variables/dev-token.env",
+                   "type": "s3"
+               }
+           ],
 
       "logConfiguration": {
         "logDriver": "awslogs",
