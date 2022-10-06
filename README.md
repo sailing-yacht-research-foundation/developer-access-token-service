@@ -142,11 +142,11 @@ after the image is pushed. open the `alb_dns_name/v1/health` in browser. should 
 
 ## Seed
 
-The script is in `./src/api/scripts/seedActions.js` and `./src/api/scripts/seed.js`. Used to add actions and scopes that are not in database yet from the action list in `./src/api/scripts/live-data-actions.json` and `./src/api/scripts/streaming-actions.json`
+The script is in `src/api/scripts/seedActions.js` and `src/api/scripts/seed.js`. Used to add actions and scopes that are not in database yet from the action list in `src/api/scripts/live-data-actions.json` and `src/api/scripts/streaming-actions.json`
 
 steps to run the script :
 
-1. cd to `.src/api`
-2. update the `./src/api/scripts/live-data-actions.json` or `./src/api/scripts/streaming-actions.json` with the actions you want to add to db
-3. adjust these values `DB_HOST`,`DB_PORT`,`DB_USER`,`DB_PASSWORD`,`DB_NAME` in the env file `./src/api/.env`
+1. cd to `src/api`
+2. update the `src/api/scripts/live-data-actions.json` or `src/api/scripts/streaming-actions.json` with the actions you want to add to db
+3. adjust these values `DB_HOST`,`DB_PORT`,`DB_USER`,`DB_PASSWORD`,`DB_NAME` in the env file `src/api/.env`
 4. run `npm run seed`
