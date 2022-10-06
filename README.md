@@ -18,6 +18,7 @@ Service that will be used to provide developer tokens for developers to use for 
 - [Deployment](#deployment)
   - [Resources Provisioning](#resources-provisioning)
   - [Production Build](#production-build)
+- [Scripts](#scripts)
 
 # Authentication
 
@@ -103,7 +104,7 @@ this variables will be used in building image for production
 ## Development Build
 
 This service was deployed to aws development environment using terraform similar to the raw server service
-In the terraform file the vpc id that was created for the first service was used. So all the services that was deployed (raw server, live data server and developer token) were all deployed in the same vpc 
+In the terraform file the vpc id that was created for the first service was used. So all the services that was deployed (raw server, live data server and developer token) were all deployed in the same vpc
 the credentials for the database was used in the .env file when building the image
 
 To deploy the service you need to run
@@ -136,3 +137,16 @@ following is the steps to build production image
 6. push image, run `docker push ecr_repo_url`
 
 after the image is pushed. open the `alb_dns_name/v1/health` in browser. should reply with json message `ok`
+
+# Scripts
+
+## Seed
+
+The script is in `./src/api/scripts/seedActions.js` and `./src/api/scripts/seed.js`. Used to add actions and scopes that are not in database yet from the action list in `./src/api/scripts/live-data-actions.json` and `./src/api/scripts/streaming-actions.json`
+
+steps to run the script :
+
+1. cd to `.src/api`
+2. update the `./src/api/scripts/live-data-actions.json` or `./src/api/scripts/streaming-actions.json` with the actions you want to add to db
+3. adjust these values `DB_HOST`,`DB_PORT`,`DB_USER`,`DB_PASSWORD`,`DB_NAME` in the env file `./src/api/.env`
+4. run `npm run seed`
